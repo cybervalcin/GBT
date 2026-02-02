@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import hero4k from './assets/hero-4k.jpg';
+import hero3x2 from './assets/hero-3x2.jpg';
+import heroPortrait from './assets/hero-portrait.jpg';
 import {
   Car,
   Calendar,
@@ -40,7 +43,7 @@ const THEME = {
     textMuted: "text-neutral-400"
   },
   images: {
-    heroBg: "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2000&auto=format&fit=crop",
+    heroBg: hero4k,
     services: {
       ceramic: "https://images.unsplash.com/photo-1621994364402-4091a1a5b675?q=80&w=800&auto=format&fit=crop",
       correction: "https://images.unsplash.com/photo-1600705722908-bab1e61c0b4d?q=80&w=800&auto=format&fit=crop",
@@ -638,12 +641,22 @@ const HomePage = ({ lang, openBooking }) => {
       <section className="relative h-screen flex items-center justify-center overflow-hidden" id="home">
         {/* Background Image with Dark Overlay */}
         <div className="absolute inset-0 z-0">
-          <img
-            src={THEME.images.heroBg}
-            alt="Detailing Studio"
-            className="w-full h-full object-cover transform scale-105 animate-in fade-in duration-1000"
-            onError={handleImageError}
-          />
+          <picture>
+            <source media="(max-width: 768px)" srcSet={heroPortrait} />
+            <source
+              media="(max-width: 1280px)"
+              srcSet={`${hero3x2} 3000w, ${hero4k} 3840w`}
+              sizes="100vw"
+            />
+            <img
+              src={THEME.images.heroBg}
+              srcSet={`${hero3x2} 3000w, ${hero4k} 3840w`}
+              sizes="100vw"
+              alt="Detailing Studio"
+              className="w-full h-full object-cover transform scale-105 animate-in fade-in duration-1000"
+              onError={handleImageError}
+            />
+          </picture>
           {/* Gradients */}
           <div className="absolute inset-0 bg-neutral-950/80"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-neutral-950/50"></div>
