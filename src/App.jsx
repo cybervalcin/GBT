@@ -59,13 +59,13 @@ const INSTAGRAM_POSTS = [
     id: 1,
     likes: 243,
     img: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=600&auto=format&fit=crop",
-    desc: "Audi R8 protégée et prête pour la route ! 🏁 Céramique 5 ans appliquée. #AudiR8 #CeramicPro #StJerome"
+    desc: "Audi R8 protégée et prête pour la route ! 🏁 Céramique 5 ans appliquée. #AudiR8 #CeramicPro #Mascouche"
   },
   {
     id: 2,
     likes: 132,
     img: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=600&auto=format&fit=crop",
-    desc: "Lamborghini Huracan : Protection complète PPF. Prête à dévorer l'asphalte ! 🐂💨 #Lamborghini #PPF #StJerome"
+    desc: "Lamborghini Huracan : Protection complète PPF. Prête à dévorer l'asphalte ! 🐂💨 #Lamborghini #PPF #Mascouche"
   },
   {
     id: 3,
@@ -156,7 +156,7 @@ const SERVICES_HIGHLIGHTS = [
 ];
 
 const REVIEWS = [
-  { name: "Marc-André L.", rating: 5, text: "Ma Tesla a l'air plus neuve que lors de la livraison. Service incroyable à St-Jérôme." },
+  { name: "Marc-André L.", rating: 5, text: "Ma Tesla a l'air plus neuve que lors de la livraison. Service incroyable à Mascouche." },
   { name: "Sophie B.", rating: 5, text: "Le traitement céramique a sauvé ma peinture cet hiver. Je recommande le club VIP!" },
   { name: "Jean-Pierre G.", rating: 5, text: "Vrais pros. Ils ont récupéré des rayures que je pensais permanentes." }
 ];
@@ -414,7 +414,7 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
               {submitted ? (lang === 'fr' ? 'Confirmé' : 'Confirmed') : (lang === 'fr' ? 'Réservation' : 'Booking')}
             </h3>
             <p className="text-xs text-neutral-400 mt-1">
-              {lang === 'fr' ? 'Esthétique Automobile GBT - St-Jérôme' : 'GBT Auto Aesthetics - St-Jérôme'}
+              {lang === 'fr' ? 'Esthétique Automobile GBT - Mascouche' : 'GBT Auto Aesthetics - Mascouche'}
             </p>
           </div>
           <button onClick={onClose} className="text-neutral-500 hover:text-white transition-colors p-2"><X /></button>
@@ -664,8 +664,8 @@ const HomePage = ({ lang, openBooking }) => {
 
             <p className="text-lg md:text-xl text-neutral-300 mb-10 max-w-2xl mx-auto font-light leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200 drop-shadow-md">
               {lang === 'fr'
-                ? "Redonnez à votre véhicule son éclat de salle de montre. Protection céramique, esthétique complète et restauration de précision à Saint-Jérôme."
-                : "Restore your vehicle to showroom shine. Ceramic coating, full detailing, and precision restoration in Saint-Jérôme."}
+                ? "Redonnez à votre véhicule son éclat de salle de montre. Protection céramique, esthétique complète et restauration de précision à Mascouche."
+                : "Restore your vehicle to showroom shine. Ceramic coating, full detailing, and precision restoration in Mascouche."}
             </p>
 
             {/* Vehicle Selector Widget */}
@@ -952,8 +952,8 @@ const WrapPage = ({ lang, openBooking }) => {
             </h1>
             <p className="text-xl text-neutral-300 mb-8 leading-relaxed">
               {lang === 'fr'
-                ? "Réalisé par nos experts partenaires chez Protection Prestige, directement dans nos installations de St-Jérôme."
-                : "Executed by our partners at Protection Prestige, right here in our St-Jérôme facility."}
+                ? "Réalisé par nos experts partenaires chez Protection Prestige, directement dans nos installations de Mascouche."
+                : "Executed by our partners at Protection Prestige, right here in our Mascouche facility."}
             </p>
 
             <div className="flex gap-4 mb-12">
@@ -1103,7 +1103,7 @@ const App = () => {
             <div>
               <h4 className="text-white font-bold uppercase mb-6">{lang === 'fr' ? 'Villes Desservies' : 'Service Areas'}</h4>
               <ul className="space-y-3">
-                <li>Saint-Jérôme</li>
+                <li>Mascouche</li>
                 <li>Blainville</li>
                 <li>Mirabel</li>
                 <li>Prévost</li>
