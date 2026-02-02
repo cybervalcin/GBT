@@ -706,8 +706,11 @@ const HomePage = ({ lang, openBooking }) => {
           type="button"
           aria-label={lang === 'fr' ? 'Aller aux services' : 'Go to services'}
           onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-neutral-500 hover:text-amber-400 transition-colors cursor-pointer"
+          className="group absolute bottom-10 left-1/2 -translate-x-1/2 text-neutral-500 hover:text-amber-400 transition-colors cursor-pointer"
         >
+          <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-8 rounded-full border border-neutral-700 bg-neutral-950/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-neutral-300 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            {lang === 'fr' ? 'Défiler' : 'Scroll'}
+          </span>
           <div className="w-6 h-10 border-2 border-neutral-500 rounded-full flex justify-center pt-2">
             <div className="w-1 h-2 bg-current rounded-full scroll-wheel"></div>
           </div>
