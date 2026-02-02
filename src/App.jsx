@@ -702,11 +702,16 @@ const HomePage = ({ lang, openBooking }) => {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-neutral-500">
+        <button
+          type="button"
+          aria-label={lang === 'fr' ? 'Aller aux services' : 'Go to services'}
+          onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-neutral-500 hover:text-amber-400 transition-colors cursor-pointer"
+        >
           <div className="w-6 h-10 border-2 border-neutral-500 rounded-full flex justify-center pt-2">
-            <div className="w-1 h-2 bg-neutral-500 rounded-full"></div>
+            <div className="w-1 h-2 bg-current rounded-full scroll-wheel"></div>
           </div>
-        </div>
+        </button>
       </section>
 
       {/* SOCIAL PROOF */}
@@ -1028,6 +1033,12 @@ const App = () => {
         h1, h2, h3, h4 { font-family: 'Oswald', sans-serif; }
         .clip-path-diagonal { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0); }
         .cursor-wait { cursor: wait; }
+        .scroll-wheel { animation: scroll-wheel 1.6s ease-in-out infinite; }
+        @keyframes scroll-wheel {
+          0% { transform: translateY(0); opacity: 1; }
+          60% { transform: translateY(10px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 0; }
+        }
       `}</style>
 
       <Navbar
