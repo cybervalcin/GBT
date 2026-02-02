@@ -1059,7 +1059,7 @@ const App = () => {
 
       {/* Sticky Mobile Bar */}
       <div className="md:hidden fixed bottom-0 left-0 w-full bg-neutral-900 border-t border-neutral-800 p-4 flex gap-4 z-40 pb-safe shadow-[0_-5px_15px_rgba(0,0,0,0.5)]">
-        <a href="tel:+14505550199" className="flex-1 bg-neutral-800 text-white py-3 rounded font-bold flex items-center justify-center gap-2 active:bg-neutral-700">
+        <a href="tel:+15142587909" className="flex-1 bg-neutral-800 text-white py-3 rounded font-bold flex items-center justify-center gap-2 active:bg-neutral-700">
           <Phone size={18} /> {lang === 'fr' ? 'Appeler' : 'Call'}
         </a>
         <button
@@ -1113,10 +1113,10 @@ const App = () => {
             <div>
               <h4 className="text-white font-bold uppercase mb-6">Contact</h4>
               <ul className="space-y-3">
-                <li className="flex items-center gap-2"><MapPin size={16} className="text-amber-400" /> 1234 Boul. Curé-Labelle, St-Jérôme</li>
+                <li className="flex items-center gap-2"><MapPin size={16} className="text-amber-400" /> 122B Chemin des Anglais, Mascouche, J7L 3N6</li>
                 <li className="flex items-center gap-2">
                   <Phone size={16} className="text-amber-400" />
-                  <a href="tel:+14505550199" className="hover:text-white transition-colors">(450) 555-0199</a>
+                  <a href="tel:+15142587909" className="hover:text-white transition-colors">(514) 258-7909</a>
                 </li>
                 <li className="flex items-center gap-2"><Clock size={16} className="text-amber-400" /> Lun-Ven: 8h - 18h</li>
               </ul>
