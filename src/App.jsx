@@ -1118,7 +1118,7 @@ const App = () => {
                   <Phone size={16} className="text-amber-400" />
                   <a href="tel:+15142587909" className="hover:text-white transition-colors">(514) 258-7909</a>
                 </li>
-                <li className="flex items-center gap-2"><Clock size={16} className="text-amber-400" /> Lun-Ven: 8h - 18h</li>
+                <li className="flex items-center gap-2"><Clock size={16} className="text-amber-400" /> Lun-Ven: 9h - 18h</li>
               </ul>
             </div>
           </div>
