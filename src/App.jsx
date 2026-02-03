@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import hero4k from './assets/hero-4k.jpg';
 import hero3x2 from './assets/hero-3x2.jpg';
 import heroPortrait from './assets/hero-portrait.jpg';
+import serviceCeramic from './assets/service-protection-ceramique.jpg';
+import serviceCorrection from './assets/service-correction-peinture.jpg';
+import serviceDetailing from './assets/service-esthetique-complete.jpg';
 import {
   Car,
   Calendar,
@@ -45,9 +48,9 @@ const THEME = {
   images: {
     heroBg: hero4k,
     services: {
-      ceramic: "https://images.unsplash.com/photo-1621994364402-4091a1a5b675?q=80&w=800&auto=format&fit=crop",
-      correction: "https://images.unsplash.com/photo-1600705722908-bab1e61c0b4d?q=80&w=800&auto=format&fit=crop",
-      detailing: "https://images.unsplash.com/photo-1605161578332-94fa9154a43a?q=80&w=800&auto=format&fit=crop"
+      ceramic: serviceCeramic,
+      correction: serviceCorrection,
+      detailing: serviceDetailing
     },
     compare: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1200&auto=format&fit=crop",
     wrap: "https://images.unsplash.com/photo-1626847037657-fd3622613ce3?q=80&w=1000&auto=format&fit=crop"
