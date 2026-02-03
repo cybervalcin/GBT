@@ -344,10 +344,13 @@ const BeforeAfterSlider = () => {
     >
       <div className="absolute inset-0">
         <img src={THEME.images.compareAfter} alt="After" className="w-full h-full object-cover" onError={handleImageError} />
-        <div className="absolute top-4 right-4 bg-amber-400 text-black font-bold px-3 py-1 rounded text-xs z-10 shadow-lg">APRÈS / AFTER</div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10"></div>
+        <div className="absolute top-4 right-4 bg-amber-400 text-black font-bold px-4 py-1.5 rounded-full text-xs tracking-widest z-10 shadow-[0_8px_30px_rgba(0,0,0,0.45)] border border-amber-200/40">
+          APRÈS / AFTER
+        </div>
       </div>
 
-      <div className="absolute inset-0 overflow-hidden border-r-2 border-amber-400" style={{ width: `${sliderPosition}%` }}>
+      <div className="absolute inset-0 overflow-hidden border-r-2 border-amber-400 shadow-[0_0_24px_rgba(212,175,55,0.35)]" style={{ width: `${sliderPosition}%` }}>
         <div className="relative h-full" style={{ width: containerWidth ? `${containerWidth}px` : '100vw' }}>
           <img
             src={THEME.images.compareBefore}
@@ -355,12 +358,15 @@ const BeforeAfterSlider = () => {
             className="w-full h-full object-cover"
             onError={handleImageError}
           />
+          <div className="absolute inset-0 bg-black/25"></div>
         </div>
-        <div className="absolute top-4 left-4 bg-neutral-900 text-white font-bold px-3 py-1 rounded text-xs border border-neutral-700 z-10 shadow-lg">AVANT / BEFORE</div>
+        <div className="absolute top-4 left-4 bg-neutral-950/90 text-amber-200 font-bold px-4 py-1.5 rounded-full text-xs tracking-widest border border-amber-400/30 z-10 shadow-[0_8px_30px_rgba(0,0,0,0.45)]">
+          AVANT / BEFORE
+        </div>
       </div>
 
       <div className="absolute top-0 bottom-0 w-10 -ml-5 cursor-col-resize z-20 flex items-center justify-center group-hover:scale-110 transition-transform" style={{ left: `${sliderPosition}%` }}>
-        <div className="w-10 h-10 bg-amber-400 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.5)] text-black border-2 border-white">
+        <div className="w-10 h-10 bg-amber-400 rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(212,175,55,0.55)] text-black border-2 border-white/80 ring-4 ring-amber-400/20">
           <div className="flex gap-1"><ChevronLeft size={14} className="stroke-[3]" /><ChevronRight size={14} className="stroke-[3]" /></div>
         </div>
       </div>
