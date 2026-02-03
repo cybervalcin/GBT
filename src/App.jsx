@@ -624,20 +624,6 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                       </button>
                     ))}
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <input
-                      placeholder={lang === 'fr' ? "Marque" : "Make"}
-                      className="bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
-                      value={formData.vehicle.make}
-                      onChange={(e) => setFormData({ ...formData, vehicle: { ...formData.vehicle, make: e.target.value } })}
-                    />
-                    <input
-                      placeholder={lang === 'fr' ? "Modèle" : "Model"}
-                      className="bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
-                      value={formData.vehicle.model}
-                      onChange={(e) => setFormData({ ...formData, vehicle: { ...formData.vehicle, model: e.target.value } })}
-                    />
-                  </div>
                 </div>
               )}
 
