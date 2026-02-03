@@ -80,21 +80,21 @@ const INSTAGRAM_POSTS = [
     likes: 243,
     img: instagramAudiRs6,
     desc: "Magnifique Audi RS6 !\n\nDetailing intérieur + extérieur complet",
-    link: THEME.links.instagram
+    link: "https://www.instagram.com/p/DLs8xWfvpAl/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
   },
   {
     id: 3,
     likes: 210,
     img: instagramRangeRover,
     desc: "Detailing complet sur ce magnifique Range Rover Sport !",
-    link: THEME.links.instagram
+    link: "https://www.instagram.com/p/DLDrI-mycbt/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
   },
   {
     id: 4,
     likes: 95,
     img: instagramPorsche,
     desc: "Magnifique Porsche 911 Turbo S 2023\n\nNettoyage complet intérieur + extérieur",
-    link: THEME.links.instagram
+    link: "https://www.instagram.com/p/DKsoZDCSk68/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
   }
 ];
 
