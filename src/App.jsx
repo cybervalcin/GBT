@@ -8,7 +8,7 @@ import instagramPorsche from './assets/instagram-porsche.jpg';
 import instagramBmw from './assets/instagram-bmw.jpg';
 import instagramAudiRs6 from './assets/instagram-audi-rs6.jpg';
 import instagramRangeRover from './assets/instagram-range-rover-sport.jpg';
-import logoWide from './assets/TP-Logo-GBT-1200x300px.png';
+import logoWide from './assets/Horizontal-GBT-LOGO.png';
 import serviceCeramic from './assets/service-protection-ceramique.jpg';
 import serviceCorrection from './assets/service-correction-peinture.jpg';
 import serviceDetailing from './assets/service-esthetique-complete.jpg';
