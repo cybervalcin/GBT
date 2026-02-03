@@ -670,6 +670,10 @@ const HomePage = ({ lang, openBooking }) => {
   const handleVehicleSearch = (e) => {
     e.preventDefault();
     setRecommendation(true);
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
