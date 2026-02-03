@@ -8,6 +8,8 @@ import instagramPorsche from './assets/instagram-porsche.jpg';
 import instagramBmw from './assets/instagram-bmw.jpg';
 import instagramAudiRs6 from './assets/instagram-audi-rs6.jpg';
 import instagramRangeRover from './assets/instagram-range-rover-sport.jpg';
+import logoWide from './assets/Logo-GBT-1200x300px.jpg';
+import logoSquare from './assets/Logo-GBT-1024x1024px.jpg';
 import serviceCeramic from './assets/service-protection-ceramique.jpg';
 import serviceCorrection from './assets/service-correction-peinture.jpg';
 import serviceDetailing from './assets/service-esthetique-complete.jpg';
@@ -252,12 +254,20 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 py-3' : 'bg-transparent py-6'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
-        <div
+        <div 
           onClick={() => setPage('home')}
           className="text-2xl font-black text-white tracking-tighter cursor-pointer flex items-center gap-2 hover:scale-105 transition-transform"
         >
-          <div className="w-8 h-8 bg-amber-400 flex items-center justify-center rounded text-black font-bold">G</div>
-          GBT <span className="text-neutral-500 font-light">AESTHETICS</span>
+          <picture className="block">
+            <source media="(max-width: 640px)" srcSet={logoSquare} />
+            <img
+              src={logoWide}
+              alt="GBT Aesthetics"
+              className="h-8 md:h-10 w-auto object-contain"
+              loading="eager"
+              decoding="async"
+            />
+          </picture>
         </div>
 
         {/* Desktop Links */}
@@ -1119,9 +1129,14 @@ const App = () => {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
-              <div className="text-2xl font-black text-white tracking-tighter mb-6 flex items-center gap-2">
-                <div className="w-8 h-8 bg-amber-400 flex items-center justify-center rounded text-black font-bold">G</div>
-                GBT
+              <div className="mb-6 flex items-center">
+                <img
+                  src={logoWide}
+                  alt="GBT Aesthetics"
+                  className="h-8 w-auto object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <p className="mb-4">
                 {lang === 'fr' ? "L'excellence en esthétique automobile sur la Rive-Nord." : 'Excellence in automotive detailing on the North Shore.'}
