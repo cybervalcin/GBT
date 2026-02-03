@@ -4,6 +4,10 @@ import hero3x2 from './assets/hero-3x2.jpg';
 import heroPortrait from './assets/hero-portrait.jpg';
 import beforeCompare from './assets/before.jpg';
 import afterCompare from './assets/after.jpg';
+import instagramPorsche from './assets/instagram-porsche.jpg';
+import instagramBmw from './assets/instagram-bmw.jpg';
+import instagramAudiRs6 from './assets/instagram-audi-rs6.jpg';
+import instagramRangeRover from './assets/instagram-range-rover-sport.jpg';
 import serviceCeramic from './assets/service-protection-ceramique.jpg';
 import serviceCorrection from './assets/service-correction-peinture.jpg';
 import serviceDetailing from './assets/service-esthetique-complete.jpg';
@@ -67,26 +71,30 @@ const INSTAGRAM_POSTS = [
   {
     id: 1,
     likes: 243,
-    img: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=600&auto=format&fit=crop",
-    desc: "Audi R8 protégée et prête pour la route ! 🏁 Céramique 5 ans appliquée. #AudiR8 #CeramicPro #Mascouche"
+    img: instagramPorsche,
+    desc: "Porsche — Protection et finition premium.",
+    link: THEME.links.instagram
   },
   {
     id: 2,
     likes: 132,
-    img: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=600&auto=format&fit=crop",
-    desc: "Lamborghini Huracan : Protection complète PPF. Prête à dévorer l'asphalte ! 🐂💨 #Lamborghini #PPF #Mascouche"
+    img: instagramBmw,
+    desc: "BMW — Correction de peinture & brillance miroir.",
+    link: THEME.links.instagram
   },
   {
     id: 3,
     likes: 95,
-    img: "https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=600&auto=format&fit=crop",
-    desc: "Bye bye le calcium ! 👋 Un intérieur remis à neuf pour la saison. Réservez votre place maintenant. #DetailingInterieur"
+    img: instagramAudiRs6,
+    desc: "Audi RS6 — Détails complets & protection.",
+    link: THEME.links.instagram
   },
   {
     id: 4,
     likes: 210,
-    img: "https://images.unsplash.com/photo-1494905998402-395d579af36f?q=80&w=600&auto=format&fit=crop",
-    desc: "Ce reflet... 🤤 Polissage 2 étapes terminé. La profondeur de la couleur est revenue ! 💎 #PaintCorrection"
+    img: instagramRangeRover,
+    desc: "Range Rover Sport — Esthétique complète.",
+    link: THEME.links.instagram
   }
 ];
 
@@ -934,7 +942,7 @@ const HomePage = ({ lang, openBooking }) => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {INSTAGRAM_POSTS.map((post) => (
               <a
-                href={THEME.links.instagram}
+                href={post.link || THEME.links.instagram}
                 target="_blank"
                 rel="noreferrer"
                 key={post.id}
