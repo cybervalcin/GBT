@@ -278,7 +278,7 @@ const BRAND_BADGES = [
       fr: ['Cire nanocéramique 1 an', 'Cire nanocéramique 3 ans', 'Cire nanocéramique 5 ans'],
       en: ['Nano ceramic 1 year', 'Nano ceramic 3 years', 'Nano ceramic 5 years']
     },
-    cta: { label: { fr: 'Voir les protections céramiques', en: 'See ceramic protection' }, scroll: 'services' }
+    cta: { label: { fr: 'Voir les protections céramiques', en: 'See ceramic protection' }, scroll: 'service-ceramic' }
   },
   {
     id: 'gtechniq',
@@ -292,7 +292,7 @@ const BRAND_BADGES = [
       fr: ['Scellant à peinture (durée 6 mois)', 'Cire hydro shine (1–2 semaines)', 'Traitements / protections'],
       en: ['Paint sealant (6 months)', 'Hydro shine wax (1–2 weeks)', 'Treatments / protection']
     },
-    cta: { label: { fr: 'Voir les protections', en: 'See protection options' }, scroll: 'services' }
+    cta: { label: { fr: 'Voir les protections', en: 'See protection options' }, scroll: 'service-ceramic' }
   },
   {
     id: 'rupes',
@@ -306,7 +306,7 @@ const BRAND_BADGES = [
       fr: ['Polissage 1 étape (≈4h)', 'Polissage 2 étapes (≈8h)', 'Remise à neuf du véhicule'],
       en: ['1-step polish (≈4h)', '2-step polish (≈8h)', 'Vehicle reconditioning']
     },
-    cta: { label: { fr: 'Voir le polissage', en: 'See polishing' }, scroll: 'services' }
+    cta: { label: { fr: 'Voir le polissage', en: 'See polishing' }, scroll: 'service-correction' }
   },
   {
     id: 'xpel',
@@ -1088,6 +1088,7 @@ const HomePage = ({ lang, openBooking, setBookingPrefill, setPage }) => {
             {SERVICES_HIGHLIGHTS.map((service) => (
               <div
                 key={service.id}
+                id={`service-${service.id}`}
                 className="group relative bg-neutral-900 rounded-2xl overflow-hidden border border-neutral-800 hover:border-amber-400/50 transition-all duration-500 hover:-translate-y-2 cursor-pointer"
                 onClick={openBooking}
               >
