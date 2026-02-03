@@ -313,6 +313,7 @@ const BeforeAfterSlider = () => {
   const [sliderPosition, setSliderPosition] = useState(50);
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const isAfterActive = sliderPosition < 50;
 
   useEffect(() => {
     if (containerRef.current) {
@@ -345,7 +346,13 @@ const BeforeAfterSlider = () => {
       <div className="absolute inset-0">
         <img src={THEME.images.compareAfter} alt="After" className="w-full h-full object-cover" onError={handleImageError} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10"></div>
-        <div className="absolute top-4 right-4 bg-amber-400 text-black font-bold px-4 py-1.5 rounded-full text-xs tracking-widest z-10 shadow-[0_8px_30px_rgba(0,0,0,0.45)] border border-amber-200/40">
+        <div
+          className={`absolute top-4 right-4 font-bold px-4 py-1.5 rounded-full text-xs tracking-widest z-10 shadow-[0_8px_30px_rgba(0,0,0,0.45)] border transition-colors ${
+            isAfterActive
+              ? 'bg-amber-400 text-black border-amber-200/40'
+              : 'bg-neutral-950/70 text-amber-200 border-amber-400/30'
+          }`}
+        >
           APRÈS / AFTER
         </div>
       </div>
@@ -360,7 +367,13 @@ const BeforeAfterSlider = () => {
           />
           <div className="absolute inset-0 bg-black/25"></div>
         </div>
-        <div className="absolute top-4 left-4 bg-neutral-950/90 text-amber-200 font-bold px-4 py-1.5 rounded-full text-xs tracking-widest border border-amber-400/30 z-10 shadow-[0_8px_30px_rgba(0,0,0,0.45)]">
+        <div
+          className={`absolute top-4 left-4 font-bold px-4 py-1.5 rounded-full text-xs tracking-widest border z-10 shadow-[0_8px_30px_rgba(0,0,0,0.45)] transition-colors ${
+            isAfterActive
+              ? 'bg-neutral-950/90 text-amber-200 border-amber-400/30'
+              : 'bg-amber-400 text-black border-amber-200/40'
+          }`}
+        >
           AVANT / BEFORE
         </div>
       </div>
