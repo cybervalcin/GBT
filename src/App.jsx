@@ -895,14 +895,25 @@ const HomePage = ({ lang, openBooking }) => {
 
               <div className="md:w-1/2 grid grid-cols-2 gap-4 w-full">
                 {[
-                  { title: '1 Lavage/mois', sub: 'Inclus' },
+                  { title: '1 Lavage/mois', mobileTitle: ['1 Lavage', 'par mois'], sub: 'Inclus' },
                   { title: '10% Rabais', sub: 'Services' },
                   { title: 'Priorité', sub: 'Booking' },
                   { title: 'Lave-glace', sub: 'Gratuit' },
                 ].map((perk, i) => (
                   <div key={i} className="bg-neutral-950/50 p-5 sm:p-6 rounded-xl border border-white/5 text-center cursor-default hover:bg-neutral-900 transition-colors">
                     <div className="text-amber-400 font-bold leading-tight text-[clamp(1rem,3.4vw,1.4rem)] sm:text-xl md:text-2xl break-words whitespace-normal">
-                      {perk.title}
+                      {perk.mobileTitle ? (
+                        <>
+                          <span className="sm:hidden">
+                            {perk.mobileTitle.map((line, idx) => (
+                              <span key={idx} className="block">{line}</span>
+                            ))}
+                          </span>
+                          <span className="hidden sm:inline">{perk.title}</span>
+                        </>
+                      ) : (
+                        <span>{perk.title}</span>
+                      )}
                     </div>
                     <div className="text-neutral-500 text-xs sm:text-sm uppercase tracking-wide mt-2">
                       {perk.sub}
