@@ -70,30 +70,30 @@ const THEME = {
 const INSTAGRAM_POSTS = [
   {
     id: 1,
-    likes: 243,
-    img: instagramAudiRs6,
-    desc: "Magnifique Audi RS6 !\n\nDetailing intérieur + extérieur complet",
-    link: THEME.links.instagram
-  },
-  {
-    id: 2,
     likes: 132,
     img: instagramBmw,
     desc: "BMW — Correction de peinture & brillance miroir.",
     link: THEME.links.instagram
   },
   {
+    id: 2,
+    likes: 243,
+    img: instagramAudiRs6,
+    desc: "Magnifique Audi RS6 !\n\nDetailing intérieur + extérieur complet",
+    link: THEME.links.instagram
+  },
+  {
     id: 3,
-    likes: 95,
-    img: instagramPorsche,
-    desc: "Magnifique Porsche 911 Turbo S 2023\n\nNettoyage complet intérieur + extérieur",
+    likes: 210,
+    img: instagramRangeRover,
+    desc: "Detailing complet sur ce magnifique Range Rover Sport !",
     link: THEME.links.instagram
   },
   {
     id: 4,
-    likes: 210,
-    img: instagramRangeRover,
-    desc: "Detailing complet sur ce magnifique Range Rover Sport !",
+    likes: 95,
+    img: instagramPorsche,
+    desc: "Magnifique Porsche 911 Turbo S 2023\n\nNettoyage complet intérieur + extérieur",
     link: THEME.links.instagram
   }
 ];
