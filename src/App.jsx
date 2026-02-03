@@ -72,7 +72,7 @@ const INSTAGRAM_POSTS = [
     id: 1,
     likes: 243,
     img: instagramAudiRs6,
-    desc: "Audi RS6 — Détails complets & protection.",
+    desc: "Magnifique Audi RS6 !\n\nDetailing intérieur + extérieur complet",
     link: THEME.links.instagram
   },
   {
@@ -86,14 +86,14 @@ const INSTAGRAM_POSTS = [
     id: 3,
     likes: 95,
     img: instagramPorsche,
-    desc: "Porsche — Protection et finition premium.",
+    desc: "Magnifique Porsche 911 Turbo S 2023\n\nNettoyage complet intérieur + extérieur",
     link: THEME.links.instagram
   },
   {
     id: 4,
     likes: 210,
     img: instagramRangeRover,
-    desc: "Range Rover Sport — Esthétique complète.",
+    desc: "Detailing complet sur ce magnifique Range Rover Sport !",
     link: THEME.links.instagram
   }
 ];
