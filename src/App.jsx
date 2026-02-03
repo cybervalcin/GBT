@@ -670,10 +670,7 @@ const HomePage = ({ lang, openBooking }) => {
   const handleVehicleSearch = (e) => {
     e.preventDefault();
     setRecommendation(true);
-    const servicesSection = document.getElementById('services');
-    if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    openBooking();
   };
 
   return (
@@ -722,21 +719,26 @@ const HomePage = ({ lang, openBooking }) => {
                 : "Restore your vehicle to showroom shine. Ceramic coating, full detailing, and precision restoration in Mascouche."}
             </p>
 
-            {/* Vehicle Selector Widget */}
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-2 rounded-2xl max-w-xl mx-auto shadow-2xl animate-in fade-in zoom-in duration-500 delay-300">
-              <form onSubmit={handleVehicleSearch} className="flex flex-col md:flex-row gap-2">
-                <div className="flex-1 relative">
-                  <Car className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" size={20} />
-                  <input
-                    type="text"
-                    placeholder={lang === 'fr' ? "Entrez votre véhicule (ex: Audi Q5)" : "Enter your vehicle (e.g. Audi Q5)"}
-                    className="w-full h-14 bg-neutral-900/80 rounded-xl pl-12 pr-4 text-white placeholder-neutral-500 border border-neutral-800 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-all"
-                    value={vehicleQuery}
-                    onChange={(e) => setVehicleQuery(e.target.value)}
-                  />
-                </div>
-                <Button className="h-14 rounded-xl px-8" icon={ArrowRight}>
-                  {lang === 'fr' ? 'Voir Forfaits' : 'See Packages'}
+            {/* Popular Models + CTA */}
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl max-w-xl mx-auto shadow-2xl animate-in fade-in zoom-in duration-500 delay-300">
+              <div className="text-xs uppercase tracking-widest text-neutral-400 mb-3">
+                {lang === 'fr' ? 'Modèles populaires' : 'Popular models'}
+              </div>
+              <div className="flex flex-wrap gap-2 mb-4 justify-center">
+                {['Audi Q5', 'BMW M3', 'Tesla Model 3', 'Range Rover Sport'].map((model) => (
+                  <button
+                    key={model}
+                    type="button"
+                    onClick={() => { setVehicleQuery(model); setRecommendation(true); }}
+                    className="px-3 py-2 rounded-full text-xs sm:text-sm font-semibold bg-neutral-900/80 border border-neutral-800 text-neutral-200 hover:border-amber-400/60 hover:text-amber-300 transition-colors"
+                  >
+                    {model}
+                  </button>
+                ))}
+              </div>
+              <form onSubmit={handleVehicleSearch} className="flex justify-center">
+                <Button className="h-12 rounded-xl px-8" icon={ArrowRight}>
+                  {lang === 'fr' ? 'Voir Nos Forfaits' : 'See Packages'}
                 </Button>
               </form>
             </div>
