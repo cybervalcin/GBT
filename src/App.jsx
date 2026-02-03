@@ -251,8 +251,8 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
   ];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 py-3' : 'bg-transparent py-6'}`}>
-      <div className="container mx-auto px-6 flex justify-between items-center">
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 py-4' : 'bg-transparent py-8'}`}>
+      <div className="container mx-auto px-6 md:px-8 flex justify-between items-center">
         {/* Logo */}
         <div 
           onClick={() => setPage('home')}
@@ -263,7 +263,7 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
             <img
               src={logoWide}
               alt="GBT Aesthetics"
-              className="h-8 md:h-10 w-auto object-contain"
+              className="h-10 sm:h-11 md:h-12 lg:h-14 w-auto object-contain"
               loading="eager"
               decoding="async"
             />
@@ -271,54 +271,54 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8 lg:gap-10">
           {navItems.map((item) => (
             <button
               key={item.label}
               onClick={() => handleNavClick(item.id)}
-              className="text-sm font-medium text-neutral-300 hover:text-amber-400 transition-colors uppercase tracking-wide cursor-pointer"
+              className="text-base lg:text-lg font-medium text-neutral-300 hover:text-amber-400 transition-colors uppercase tracking-wide cursor-pointer"
             >
               {item.label}
             </button>
           ))}
-          <button onClick={() => setPage('wrap')} className="text-sm font-bold text-neutral-300 hover:text-blue-400 transition-colors uppercase tracking-wide flex items-center gap-1 cursor-pointer">
-            <Shield size={14} className="text-blue-400" /> Wrap
+          <button onClick={() => setPage('wrap')} className="text-base lg:text-lg font-bold text-neutral-300 hover:text-blue-400 transition-colors uppercase tracking-wide flex items-center gap-2 cursor-pointer">
+            <Shield size={18} className="text-blue-400" /> Wrap
           </button>
         </div>
 
         {/* Actions */}
         <div className="hidden md:flex items-center gap-4">
-          <button onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')} className="text-neutral-500 hover:text-white font-bold text-xs">
+          <button onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')} className="text-neutral-500 hover:text-white font-bold text-sm">
             {lang === 'fr' ? 'EN' : 'FR'}
           </button>
-          <Button onClick={openBooking} icon={Calendar}>
+          <Button onClick={openBooking} icon={Calendar} className="text-base px-7 py-3.5">
             {lang === 'fr' ? 'Réserver' : 'Book Now'}
           </Button>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-white p-2" onClick={() => setMobileMenu(!mobileMenu)}>
-          {mobileMenu ? <X /> : <Menu />}
+        <button className="md:hidden text-white p-3" onClick={() => setMobileMenu(!mobileMenu)}>
+          {mobileMenu ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {mobileMenu && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-neutral-900 border-b border-neutral-800 p-6 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-2">
+        <div className="md:hidden absolute top-full left-0 w-full bg-neutral-900 border-b border-neutral-800 p-7 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-2">
           {navItems.map((item) => (
             <button
               key={item.label}
               onClick={() => handleNavClick(item.id)}
-              className="text-lg font-bold text-white text-left py-2 active:text-amber-400"
+              className="text-xl font-bold text-white text-left py-3 active:text-amber-400"
             >
               {item.label}
             </button>
           ))}
-          <button onClick={() => { setPage('wrap'); setMobileMenu(false); }} className="text-lg font-bold text-white text-left py-2 active:text-blue-400 flex items-center gap-2">
-            <Shield size={18} className="text-blue-400" /> Wrap
+          <button onClick={() => { setPage('wrap'); setMobileMenu(false); }} className="text-xl font-bold text-white text-left py-3 active:text-blue-400 flex items-center gap-3">
+            <Shield size={20} className="text-blue-400" /> Wrap
           </button>
           <hr className="border-neutral-800 my-2" />
-          <Button onClick={() => { openBooking(); setMobileMenu(false); }} className="w-full">
+          <Button onClick={() => { openBooking(); setMobileMenu(false); }} className="w-full text-base py-3.5">
             {lang === 'fr' ? 'Réserver' : 'Book Now'}
           </Button>
         </div>
