@@ -267,7 +267,7 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8 lg:gap-10">
+        <div className="hidden md:flex items-center gap-8 lg:gap-10 flex-1 justify-center">
           {navItems.map((item) => (
             <button
               key={item.label}
@@ -283,7 +283,7 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
         </div>
 
         {/* Actions */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-4 shrink-0">
           <button onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')} className="text-neutral-500 hover:text-white font-bold text-sm">
             {lang === 'fr' ? 'EN' : 'FR'}
           </button>
