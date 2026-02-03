@@ -866,7 +866,7 @@ const HomePage = ({ lang, openBooking, setBookingPrefill, setPage }) => {
     }
     if (cta.scroll) {
       const element = document.getElementById(cta.scroll);
-      if (element) element.scrollIntoView({ behavior: 'smooth' });
+      if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -1089,7 +1089,7 @@ const HomePage = ({ lang, openBooking, setBookingPrefill, setPage }) => {
               <div
                 key={service.id}
                 id={`service-${service.id}`}
-                className="group relative bg-neutral-900 rounded-2xl overflow-hidden border border-neutral-800 hover:border-amber-400/50 transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+                className="group relative bg-neutral-900 rounded-2xl overflow-hidden border border-neutral-800 hover:border-amber-400/50 transition-all duration-500 hover:-translate-y-2 cursor-pointer scroll-mt-24 md:scroll-mt-32"
                 onClick={openBooking}
               >
                 {/* Image Area */}
