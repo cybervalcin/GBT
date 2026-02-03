@@ -9,7 +9,6 @@ import instagramBmw from './assets/instagram-bmw.jpg';
 import instagramAudiRs6 from './assets/instagram-audi-rs6.jpg';
 import instagramRangeRover from './assets/instagram-range-rover-sport.jpg';
 import logoWide from './assets/TP-Logo-GBT-1200x300px.png';
-import logoSquare from './assets/TP-GBT-LOGO-1024x1024px.png';
 import serviceCeramic from './assets/service-protection-ceramique.jpg';
 import serviceCorrection from './assets/service-correction-peinture.jpg';
 import serviceDetailing from './assets/service-esthetique-complete.jpg';
@@ -258,16 +257,13 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
           onClick={() => setPage('home')}
           className="text-2xl font-black text-white tracking-tighter cursor-pointer flex items-center gap-2 hover:scale-105 transition-transform"
         >
-          <picture className="block">
-            <source media="(max-width: 640px)" srcSet={logoSquare} />
-            <img
-              src={logoWide}
-              alt="GBT Aesthetics"
-              className="h-10 sm:h-11 md:h-12 lg:h-14 w-auto object-contain"
-              loading="eager"
-              decoding="async"
-            />
-          </picture>
+          <img
+            src={logoWide}
+            alt="GBT Aesthetics"
+            className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain"
+            loading="eager"
+            decoding="async"
+          />
         </div>
 
         {/* Desktop Links */}
@@ -1133,7 +1129,7 @@ const App = () => {
                 <img
                   src={logoWide}
                   alt="GBT Aesthetics"
-                  className="h-8 w-auto object-contain"
+                  className="h-9 md:h-10 w-auto object-contain"
                   loading="lazy"
                   decoding="async"
                 />
