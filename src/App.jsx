@@ -265,6 +265,65 @@ const POPULAR_MODELS = [
   { label: 'Range Rover Sport', make: 'Range Rover', model: 'Sport', type: 'vus' }
 ];
 
+const BRAND_BADGES = [
+  {
+    id: 'ceramic-pro',
+    name: 'Ceramic Pro',
+    tooltip: { fr: 'Protection nanocéramique (1 à 5 ans).', en: 'Nano-ceramic protection (1–5 years).' },
+    about: {
+      fr: 'Protection nanocéramique pour renforcer la brillance et aider à protéger la peinture.',
+      en: 'Nano-ceramic protection to boost gloss and help protect paint.'
+    },
+    services: {
+      fr: ['Cire nanocéramique 1 an', 'Cire nanocéramique 3 ans', 'Cire nanocéramique 5 ans'],
+      en: ['Nano ceramic 1 year', 'Nano ceramic 3 years', 'Nano ceramic 5 years']
+    },
+    cta: { label: { fr: 'Voir les protections céramiques', en: 'See ceramic protection' }, scroll: 'services' }
+  },
+  {
+    id: 'gtechniq',
+    name: 'Gtechniq',
+    tooltip: { fr: 'Scellants et traitements de protection.', en: 'Sealants and protection treatments.' },
+    about: {
+      fr: 'Scellants et traitements pour protéger la finition et faciliter l’entretien.',
+      en: 'Sealants and treatments to protect the finish and simplify maintenance.'
+    },
+    services: {
+      fr: ['Scellant à peinture (durée 6 mois)', 'Cire hydro shine (1–2 semaines)', 'Traitements / protections'],
+      en: ['Paint sealant (6 months)', 'Hydro shine wax (1–2 weeks)', 'Treatments / protection']
+    },
+    cta: { label: { fr: 'Voir les protections', en: 'See protection options' }, scroll: 'services' }
+  },
+  {
+    id: 'rupes',
+    name: 'Rupes',
+    tooltip: { fr: 'Outils pro pour polissage et correction.', en: 'Pro tools for polishing and correction.' },
+    about: {
+      fr: 'Équipements professionnels de polissage pour corriger la peinture et améliorer la finition.',
+      en: 'Professional polishing equipment to correct paint and improve finish.'
+    },
+    services: {
+      fr: ['Polissage 1 étape (≈4h)', 'Polissage 2 étapes (≈8h)', 'Remise à neuf du véhicule'],
+      en: ['1-step polish (≈4h)', '2-step polish (≈8h)', 'Vehicle reconditioning']
+    },
+    cta: { label: { fr: 'Voir le polissage', en: 'See polishing' }, scroll: 'services' }
+  },
+  {
+    id: 'xpel',
+    name: 'XPEL',
+    tooltip: { fr: 'Films de protection / wrap.', en: 'Protection films / wrap.' },
+    about: {
+      fr: 'Films pour protection et personnalisation (wrap, chrome delete, teinte, etc.).',
+      en: 'Films for protection and personalization (wrap, chrome delete, tint, etc.).'
+    },
+    services: {
+      fr: ['Lumières avant teintées', 'Lumières arrière teintées', 'Chrome delete complet', 'Wrap complet'],
+      en: ['Tinted front lights', 'Tinted rear lights', 'Full chrome delete', 'Full wrap']
+    },
+    cta: { label: { fr: 'Voir la section wrap', en: 'See wrap section' }, page: 'wrap' }
+  }
+];
+
 const REVIEWS = [
   { name: "Marc-André L.", rating: 5, text: "Ma Tesla a l'air plus neuve que lors de la livraison. Service incroyable à Mascouche." },
   { name: "Sophie B.", rating: 5, text: "Le traitement céramique a sauvé ma peinture cet hiver. Je recommande le club VIP!" },
@@ -766,9 +825,19 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
 
 // --- PAGES ---
 
-const HomePage = ({ lang, openBooking, setBookingPrefill }) => {
+const HomePage = ({ lang, openBooking, setBookingPrefill, setPage }) => {
   const [vehicleQuery, setVehicleQuery] = useState('');
   const [recommendation, setRecommendation] = useState(null);
+  const [activeBadge, setActiveBadge] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobile(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener('change', update);
+    return () => mediaQuery.removeEventListener('change', update);
+  }, []);
 
   const handleVehicleSearch = (e) => {
     e.preventDefault();
@@ -784,6 +853,21 @@ const HomePage = ({ lang, openBooking, setBookingPrefill }) => {
       make: model.make,
       model: model.model
     });
+  };
+
+  const activeBrand = BRAND_BADGES.find((brand) => brand.id === activeBadge);
+
+  const handleBadgeCTA = (cta) => {
+    if (!cta) return;
+    setActiveBadge(null);
+    if (cta.page === 'wrap') {
+      setPage('wrap');
+      return;
+    }
+    if (cta.scroll) {
+      const element = document.getElementById(cta.scroll);
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -889,14 +973,107 @@ const HomePage = ({ lang, openBooking, setBookingPrefill }) => {
       {/* SOCIAL PROOF */}
       <section className="py-12 bg-neutral-950 border-b border-neutral-900">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-            {['Ceramic Pro', 'Gtechniq', 'Rupes', 'XPEL'].map(brand => (
-              <div key={brand} className="text-center font-black text-2xl text-white flex items-center justify-center border border-white/10 h-20 rounded-lg cursor-default hover:bg-white/5 transition-colors">
-                {brand}
-              </div>
-            ))}
+          <div className="relative">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {BRAND_BADGES.map((brand) => (
+                <button
+                  key={brand.id}
+                  type="button"
+                  onClick={() => setActiveBadge(brand.id)}
+                  className={`group text-center font-black text-2xl text-white flex items-center justify-center border h-20 rounded-lg transition-all duration-300 ${
+                    activeBadge === brand.id
+                      ? 'border-amber-400 shadow-[0_0_20px_rgba(212,175,55,0.35)]'
+                      : 'border-white/10'
+                  } bg-neutral-900/40 hover:bg-white/5`}
+                >
+                  <span className="relative">
+                    {brand.name}
+                    <span className="hidden md:block absolute left-1/2 -translate-x-1/2 -top-9 text-xs font-semibold text-neutral-200 bg-neutral-950/90 border border-neutral-800 px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      {brand.tooltip[lang]}
+                    </span>
+                  </span>
+                </button>
+              ))}
+            </div>
+            <p className="text-neutral-500 text-sm text-center mt-4">
+              {lang === 'fr'
+                ? 'Nous utilisons des produits et équipements reconnus : céramique, polissage, films et protection.'
+                : 'We use recognized products and equipment: ceramic, polishing, films, and protection.'}
+            </p>
           </div>
         </div>
+
+        {activeBrand && !isMobile && (
+          <div className="fixed inset-0 z-50 flex items-start justify-center pt-24">
+            <button className="absolute inset-0 bg-black/60" onClick={() => setActiveBadge(null)} aria-label="Close"></button>
+            <div className="relative bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl w-[min(560px,92vw)] p-6">
+              <button
+                className="absolute top-4 right-4 text-neutral-500 hover:text-white"
+                onClick={() => setActiveBadge(null)}
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+              <h3 className="text-2xl font-bold text-white mb-2">{activeBrand.name}</h3>
+              <div className="text-amber-400 font-semibold uppercase text-xs tracking-widest mb-2">
+                {lang === 'fr' ? 'À quoi ça sert ?' : 'What is it for?'}
+              </div>
+              <p className="text-neutral-300 mb-4">{activeBrand.about[lang]}</p>
+              <div className="text-amber-400 font-semibold uppercase text-xs tracking-widest mb-2">
+                {lang === 'fr' ? 'Services associés' : 'Associated services'}
+              </div>
+              <ul className="text-neutral-300 text-sm space-y-1 mb-4">
+                {activeBrand.services[lang].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-amber-400 rounded-full"></span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              {activeBrand.cta && (
+                <Button onClick={() => handleBadgeCTA(activeBrand.cta)} className="w-full">
+                  {activeBrand.cta.label[lang]}
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeBrand && isMobile && (
+          <div className="fixed inset-0 z-50 flex items-end">
+            <button className="absolute inset-0 bg-black/60" onClick={() => setActiveBadge(null)} aria-label="Close"></button>
+            <div className="relative bg-neutral-900 border border-neutral-800 rounded-t-2xl w-full p-6">
+              <button
+                className="absolute top-4 right-4 text-neutral-500 hover:text-white"
+                onClick={() => setActiveBadge(null)}
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+              <h3 className="text-2xl font-bold text-white mb-2">{activeBrand.name}</h3>
+              <div className="text-amber-400 font-semibold uppercase text-xs tracking-widest mb-2">
+                {lang === 'fr' ? 'À quoi ça sert ?' : 'What is it for?'}
+              </div>
+              <p className="text-neutral-300 mb-4">{activeBrand.about[lang]}</p>
+              <div className="text-amber-400 font-semibold uppercase text-xs tracking-widest mb-2">
+                {lang === 'fr' ? 'Services associés' : 'Associated services'}
+              </div>
+              <ul className="text-neutral-300 text-sm space-y-1 mb-4">
+                {activeBrand.services[lang].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-amber-400 rounded-full"></span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              {activeBrand.cta && (
+                <Button onClick={() => handleBadgeCTA(activeBrand.cta)} className="w-full">
+                  {activeBrand.cta.label[lang]}
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* SERVICES GRID */}
@@ -1248,6 +1425,7 @@ const App = () => {
             lang={lang}
             openBooking={openBooking}
             setBookingPrefill={setBookingPrefill}
+            setPage={setPage}
           />
         )}
         {page === 'wrap' && <WrapPage lang={lang} openBooking={() => openBooking(null)} />}
