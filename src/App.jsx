@@ -70,10 +70,10 @@ const THEME = {
 const INSTAGRAM_POSTS = [
   {
     id: 1,
-    likes: 132,
-    img: instagramBmw,
-    desc: "BMW — Correction de peinture & brillance miroir.",
-    link: THEME.links.instagram
+    likes: 95,
+    img: instagramPorsche,
+    desc: "Magnifique Porsche 911 Turbo S 2023\n\nNettoyage complet intérieur + extérieur",
+    link: "https://www.instagram.com/p/DKsoZDCSk68/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
   },
   {
     id: 2,
@@ -91,10 +91,10 @@ const INSTAGRAM_POSTS = [
   },
   {
     id: 4,
-    likes: 95,
-    img: instagramPorsche,
-    desc: "Magnifique Porsche 911 Turbo S 2023\n\nNettoyage complet intérieur + extérieur",
-    link: "https://www.instagram.com/p/DKsoZDCSk68/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+    likes: 132,
+    img: instagramBmw,
+    desc: "BMW — Correction de peinture & brillance miroir.",
+    link: THEME.links.instagram
   }
 ];
 
