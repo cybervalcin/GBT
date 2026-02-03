@@ -102,45 +102,130 @@ const INSTAGRAM_POSTS = [
 // Données détaillées pour le Modal de Réservation
 const PRICING_DATA = {
   detailing: {
-    title: "Detailing / Nettoyage",
+    title: { fr: "Detailing / Nettoyage", en: "Detailing / Cleaning" },
     items: [
-      { id: 'detailing_full', name: "Nettoyage Complet", price: "149,95 $", note: "Durée ≈ 2,5 h" },
-      { id: 'restoration_full', name: "Remise à neuf Véhicule", price: "399,95 $", note: "Intérieur & Extérieur" }
+      {
+        id: 'detailing_full',
+        name: { fr: "Nettoyage Complet", en: "Full Cleaning" },
+        price: { fr: "149,95 $", en: "$149.95" },
+        note: { fr: "Durée ≈ 2,5 h", en: "Duration ≈ 2.5 h" }
+      },
+      {
+        id: 'restoration_full',
+        name: { fr: "Remise à neuf Véhicule", en: "Vehicle Reconditioning" },
+        price: { fr: "399,95 $", en: "$399.95" },
+        note: { fr: "Intérieur & Extérieur", en: "Interior & Exterior" }
+      }
     ]
   },
   polishing: {
-    title: "Polissage & Correction",
+    title: { fr: "Polissage & Correction", en: "Polishing & Correction" },
     items: [
-      { id: 'headlight_basic', name: "Polissage Phares (1 étape)", price: "59,95 $", note: "" },
-      { id: 'headlight_restoration', name: "Remise à neuf Phares (3 étapes)", price: "149,95 $", note: "" },
-      { id: 'polish_1step', name: "Polissage 1 étape", price: "379,95 $", note: "Durée ≈ 4 h" },
-      { id: 'polish_2step', name: "Polissage 2 étapes", price: "769,95 $", note: "Durée ≈ 8 h" }
+      {
+        id: 'headlight_basic',
+        name: { fr: "Polissage Phares (1 étape)", en: "Headlight Polish (1 step)" },
+        price: { fr: "59,95 $", en: "$59.95" },
+        note: { fr: "", en: "" }
+      },
+      {
+        id: 'headlight_restoration',
+        name: { fr: "Remise à neuf Phares (3 étapes)", en: "Headlight Restoration (3 steps)" },
+        price: { fr: "149,95 $", en: "$149.95" },
+        note: { fr: "", en: "" }
+      },
+      {
+        id: 'polish_1step',
+        name: { fr: "Polissage 1 étape", en: "1-Step Polish" },
+        price: { fr: "379,95 $", en: "$379.95" },
+        note: { fr: "Durée ≈ 4 h", en: "Duration ≈ 4 h" }
+      },
+      {
+        id: 'polish_2step',
+        name: { fr: "Polissage 2 étapes", en: "2-Step Polish" },
+        price: { fr: "769,95 $", en: "$769.95" },
+        note: { fr: "Durée ≈ 8 h", en: "Duration ≈ 8 h" }
+      }
     ]
   },
   protection: {
-    title: "Cirage & Protection",
+    title: { fr: "Cirage & Protection", en: "Wax & Protection" },
     items: [
-      { id: 'hydro_shine', name: "Cire Hydro Shine", price: "30,00 $", note: "1 à 2 semaines" },
-      { id: 'sealant', name: "Scellant à peinture", price: "80,00 $", note: "6 mois" },
-      { id: 'nano_1yr', name: "Nanocéramique 1 an", price: "149,95 $", note: "Protection durable" },
-      { id: 'nano_3yr', name: "Nanocéramique 3 ans", price: "399,95 $", note: "Protection supérieure" },
-      { id: 'nano_5yr', name: "Nanocéramique 5 ans", price: "599,95 $", note: "L'ultime protection" }
+      {
+        id: 'hydro_shine',
+        name: { fr: "Cire Hydro Shine", en: "Hydro Shine Wax" },
+        price: { fr: "30,00 $", en: "$30.00" },
+        note: { fr: "1 à 2 semaines", en: "1–2 weeks" }
+      },
+      {
+        id: 'sealant',
+        name: { fr: "Scellant à peinture", en: "Paint Sealant" },
+        price: { fr: "80,00 $", en: "$80.00" },
+        note: { fr: "6 mois", en: "6 months" }
+      },
+      {
+        id: 'nano_1yr',
+        name: { fr: "Nanocéramique 1 an", en: "Nano Ceramic 1 year" },
+        price: { fr: "149,95 $", en: "$149.95" },
+        note: { fr: "Protection durable", en: "Long-lasting protection" }
+      },
+      {
+        id: 'nano_3yr',
+        name: { fr: "Nanocéramique 3 ans", en: "Nano Ceramic 3 years" },
+        price: { fr: "399,95 $", en: "$399.95" },
+        note: { fr: "Protection supérieure", en: "Superior protection" }
+      },
+      {
+        id: 'nano_5yr',
+        name: { fr: "Nanocéramique 5 ans", en: "Nano Ceramic 5 years" },
+        price: { fr: "599,95 $", en: "$599.95" },
+        note: { fr: "L'ultime protection", en: "Ultimate protection" }
+      }
     ]
   },
   glass: {
-    title: "Protection Vitres",
+    title: { fr: "Protection Vitres", en: "Glass Protection" },
     items: [
-      { id: 'aquapel', name: "Aquapel", price: "40,00 $", note: "6 à 8 mois" },
-      { id: 'nano_windshield', name: "Nanocéramique Pare-brise", price: "99,95 $", note: "2 ans" }
+      {
+        id: 'aquapel',
+        name: { fr: "Aquapel", en: "Aquapel" },
+        price: { fr: "40,00 $", en: "$40.00" },
+        note: { fr: "6 à 8 mois", en: "6–8 months" }
+      },
+      {
+        id: 'nano_windshield',
+        name: { fr: "Nanocéramique Pare-brise", en: "Windshield Nano Ceramic" },
+        price: { fr: "99,95 $", en: "$99.95" },
+        note: { fr: "2 ans", en: "2 years" }
+      }
     ]
   },
   wrap: {
-    title: "Wrap & Esthétique",
+    title: { fr: "Wrap & Esthétique", en: "Wrap & Styling" },
     items: [
-      { id: 'tint_front', name: "Teinte Lumières Avant", price: "129,95 $", note: "" },
-      { id: 'tint_rear', name: "Teinte Lumières Arrière", price: "129,95 $", note: "" },
-      { id: 'chrome_delete', name: "Chrome Delete Complet", price: "399,95 $", note: "" },
-      { id: 'full_wrap', name: "Wrap Complet", price: "2 999,95 $", note: "Couleur au choix" }
+      {
+        id: 'tint_front',
+        name: { fr: "Teinte Lumières Avant", en: "Front Lights Tint" },
+        price: { fr: "129,95 $", en: "$129.95" },
+        note: { fr: "", en: "" }
+      },
+      {
+        id: 'tint_rear',
+        name: { fr: "Teinte Lumières Arrière", en: "Rear Lights Tint" },
+        price: { fr: "129,95 $", en: "$129.95" },
+        note: { fr: "", en: "" }
+      },
+      {
+        id: 'chrome_delete',
+        name: { fr: "Chrome Delete Complet", en: "Full Chrome Delete" },
+        price: { fr: "399,95 $", en: "$399.95" },
+        note: { fr: "", en: "" }
+      },
+      {
+        id: 'full_wrap',
+        name: { fr: "Wrap Complet", en: "Full Wrap" },
+        price: { fr: "2 999,95 $", en: "$2,999.95" },
+        note: { fr: "Couleur au choix", en: "Color of your choice" }
+      }
     ]
   }
 };
@@ -171,6 +256,13 @@ const SERVICES_HIGHLIGHTS = [
     icon: Droplets,
     image: THEME.images.services.detailing
   }
+];
+
+const POPULAR_MODELS = [
+  { label: 'Audi Q5', make: 'Audi', model: 'Q5', type: 'vus' },
+  { label: 'BMW M3', make: 'BMW', model: 'M3', type: 'berline' },
+  { label: 'Tesla Model 3', make: 'Tesla', model: 'Model 3', type: 'electrique' },
+  { label: 'Range Rover Sport', make: 'Range Rover', model: 'Sport', type: 'vus' }
 ];
 
 const REVIEWS = [
@@ -401,7 +493,7 @@ const BeforeAfterSlider = () => {
   );
 };
 
-const BookingModal = ({ isOpen, onClose, lang }) => {
+const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -419,14 +511,40 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
     setFormData({ ...formData, service: [serviceId] });
   };
 
+  const vehicleTypes = [
+    { id: 'berline', label: { fr: 'Berline', en: 'Sedan' } },
+    { id: 'vus', label: { fr: 'VUS', en: 'SUV' } },
+    { id: 'camion', label: { fr: 'Camion', en: 'Truck' } },
+    { id: 'exotique', label: { fr: 'Exotique', en: 'Exotic' } },
+    { id: 'electrique', label: { fr: 'Électrique', en: 'Electric' } },
+    { id: 'moto', label: { fr: 'Moto', en: 'Motorcycle' } },
+  ];
+
+  const conditionOptions = [
+    { val: 'new', label: { fr: 'Neuf / Excellent', en: 'New / Excellent' }, desc: { fr: 'Peu ou pas de défauts', en: 'Few or no defects' } },
+    { val: 'avg', label: { fr: 'Moyen', en: 'Average' }, desc: { fr: 'Quelques tourbillons, saleté normale', en: 'Some swirls, normal dirt' } },
+    { val: 'bad', label: { fr: 'Intense', en: 'Heavy' }, desc: { fr: "Rayures, poils d'animaux, calcium", en: 'Scratches, pet hair, calcium' } },
+  ];
+
   // Reset state when opening
   useEffect(() => {
     if (isOpen) {
       setStep(1);
       setSubmitted(false);
       setIsSubmitting(false);
+      setFormData({
+        vehicle: {
+          type: prefill?.type || '',
+          make: prefill?.make || '',
+          model: prefill?.model || ''
+        },
+        condition: '',
+        service: [],
+        date: { time: '' },
+        contact: { name: '', email: '', phone: '' }
+      });
     }
-  }, [isOpen]);
+  }, [isOpen, prefill]);
 
   if (!isOpen) return null;
 
@@ -495,14 +613,14 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
                     {lang === 'fr' ? 'Quel est votre véhicule ?' : 'What is your vehicle?'}
                   </h4>
                   <div className="grid grid-cols-2 gap-4">
-                    {['Sedan', 'SUV', 'Truck', 'Exotic'].map(type => (
+                    {vehicleTypes.map(type => (
                       <button
-                        key={type}
-                        onClick={() => setFormData({ ...formData, vehicle: { ...formData.vehicle, type } })}
-                        className={`p-4 rounded-xl border-2 flex flex-col items-center gap-3 transition-all ${formData.vehicle.type === type ? 'border-amber-400 bg-amber-400/10 text-white' : 'border-neutral-800 bg-neutral-800/50 text-neutral-400 hover:border-neutral-600'}`}
+                        key={type.id}
+                        onClick={() => setFormData({ ...formData, vehicle: { ...formData.vehicle, type: type.id } })}
+                        className={`p-4 rounded-xl border-2 flex flex-col items-center gap-3 transition-all ${formData.vehicle.type === type.id ? 'border-amber-400 bg-amber-400/10 text-white' : 'border-neutral-800 bg-neutral-800/50 text-neutral-400 hover:border-neutral-600'}`}
                       >
                         <Car size={32} />
-                        <span className="font-bold">{type}</span>
+                        <span className="font-bold">{type.label[lang]}</span>
                       </button>
                     ))}
                   </div>
@@ -510,11 +628,13 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
                     <input
                       placeholder={lang === 'fr' ? "Marque (ex: Tesla)" : "Make"}
                       className="bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
+                      value={formData.vehicle.make}
                       onChange={(e) => setFormData({ ...formData, vehicle: { ...formData.vehicle, make: e.target.value } })}
                     />
                     <input
                       placeholder={lang === 'fr' ? "Modèle (ex: Model 3)" : "Model"}
                       className="bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
+                      value={formData.vehicle.model}
                       onChange={(e) => setFormData({ ...formData, vehicle: { ...formData.vehicle, model: e.target.value } })}
                     />
                   </div>
@@ -527,19 +647,15 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
                     {lang === 'fr' ? 'Condition actuelle' : 'Current Condition'}
                   </h4>
                   <div className="space-y-3">
-                    {[
-                      { val: 'new', label: 'Neuf / Excellent', desc: 'Peu ou pas de défauts' },
-                      { val: 'avg', label: 'Moyen', desc: 'Quelques tourbillons, saleté normale' },
-                      { val: 'bad', label: 'Intense', desc: "Rayures, poils d'animaux, calcium" },
-                    ].map(opt => (
+                    {conditionOptions.map(opt => (
                       <button
                         key={opt.val}
                         onClick={() => setFormData({ ...formData, condition: opt.val })}
                         className={`w-full text-left p-4 rounded-xl border flex justify-between items-center transition-all ${formData.condition === opt.val ? 'border-amber-400 bg-amber-400/10' : 'border-neutral-800 hover:bg-neutral-800'}`}
                       >
                         <div>
-                          <div className="font-bold text-lg text-white">{opt.label}</div>
-                          <div className="text-neutral-400 text-sm">{opt.desc}</div>
+                          <div className="font-bold text-lg text-white">{opt.label[lang]}</div>
+                          <div className="text-neutral-400 text-sm">{opt.desc[lang]}</div>
                         </div>
                         {formData.condition === opt.val && <CheckCircle className="text-amber-400" />}
                       </button>
@@ -558,7 +674,7 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
                     {Object.entries(PRICING_DATA).map(([key, category]) => (
                       <div key={key}>
                         <h5 className="text-amber-400 text-sm font-bold uppercase tracking-widest mb-3 border-b border-neutral-800 pb-2">
-                          {category.title}
+                          {category.title[lang]}
                         </h5>
                         <div className="space-y-2">
                           {category.items.map(item => (
@@ -568,13 +684,12 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
                               className={`w-full text-left p-3 rounded-lg border flex justify-between items-center transition-all ${formData.service.includes(item.id) ? 'border-amber-400 bg-amber-400/10' : 'border-neutral-800 hover:bg-neutral-800'}`}
                             >
                               <div>
-                                <div className="font-bold text-white">{item.name}</div>
-                                {item.note && <div className="text-neutral-500 text-xs italic">{item.note}</div>}
+                                <div className="font-bold text-white">{item.name[lang]}</div>
+                                {item.note?.[lang] && <div className="text-neutral-500 text-xs italic">{item.note[lang]}</div>}
                               </div>
                               <div className="flex items-center gap-3">
                                 <span className="text-amber-400 font-mono text-sm">
-                                  {item.price.includes('à partir') ? <span className="text-xs text-neutral-500 mr-1">dès</span> : ''}
-                                  {item.price.replace('à partir de ', '')}
+                                  {item.price[lang]}
                                 </span>
                                 {formData.service.includes(item.id) ? <CheckCircle size={18} className="text-amber-400" /> : <div className="w-[18px] h-[18px] rounded-full border border-neutral-600"></div>}
                               </div>
@@ -595,7 +710,7 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
                   </h4>
                   <div className="space-y-4">
                     <input
-                      placeholder="Nom Complet / Full Name"
+                      placeholder={lang === 'fr' ? 'Nom complet' : 'Full name'}
                       className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
                       onChange={(e) => setFormData({ ...formData, contact: { ...formData.contact, name: e.target.value } })}
                     />
@@ -606,13 +721,15 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
                       onChange={(e) => setFormData({ ...formData, contact: { ...formData.contact, email: e.target.value } })}
                     />
                     <input
-                      placeholder="Téléphone / Phone"
+                      placeholder={lang === 'fr' ? 'Téléphone' : 'Phone'}
                       type="tel"
                       className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
                       onChange={(e) => setFormData({ ...formData, contact: { ...formData.contact, phone: e.target.value } })}
                     />
                     <div className="p-4 bg-neutral-800 rounded-lg">
-                      <div className="text-neutral-400 text-xs uppercase tracking-wider mb-2">Disponibilité (Demain)</div>
+                      <div className="text-neutral-400 text-xs uppercase tracking-wider mb-2">
+                        {lang === 'fr' ? 'Disponibilité (Demain)' : 'Availability (Tomorrow)'}
+                      </div>
                       <div className="flex gap-2">
                         {['09:00', '13:00', '15:00'].map(time => (
                           <button
@@ -663,7 +780,7 @@ const BookingModal = ({ isOpen, onClose, lang }) => {
 
 // --- PAGES ---
 
-const HomePage = ({ lang, openBooking }) => {
+const HomePage = ({ lang, openBooking, setBookingPrefill }) => {
   const [vehicleQuery, setVehicleQuery] = useState('');
   const [recommendation, setRecommendation] = useState(null);
 
@@ -671,6 +788,16 @@ const HomePage = ({ lang, openBooking }) => {
     e.preventDefault();
     setRecommendation(true);
     openBooking();
+  };
+
+  const handleModelSelect = (model) => {
+    setVehicleQuery(model.label);
+    setRecommendation(true);
+    setBookingPrefill({
+      type: model.type,
+      make: model.make,
+      model: model.model
+    });
   };
 
   return (
@@ -725,14 +852,14 @@ const HomePage = ({ lang, openBooking }) => {
                 {lang === 'fr' ? 'Modèles populaires' : 'Popular models'}
               </div>
               <div className="flex flex-wrap gap-2 mb-4 justify-center">
-                {['Audi Q5', 'BMW M3', 'Tesla Model 3', 'Range Rover Sport'].map((model) => (
+                {POPULAR_MODELS.map((model) => (
                   <button
-                    key={model}
+                    key={model.label}
                     type="button"
-                    onClick={() => { setVehicleQuery(model); setRecommendation(true); }}
+                    onClick={() => handleModelSelect(model)}
                     className="px-3 py-2 rounded-full text-xs sm:text-sm font-semibold bg-neutral-900/80 border border-neutral-800 text-neutral-200 hover:border-amber-400/60 hover:text-amber-300 transition-colors"
                   >
-                    {model}
+                    {model.label}
                   </button>
                 ))}
               </div>
@@ -1093,6 +1220,12 @@ const App = () => {
   const [lang, setLang] = useState('fr'); // 'fr' or 'en'
   const [page, setPage] = useState('home'); // 'home' or 'wrap'
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [bookingPrefill, setBookingPrefill] = useState(null);
+
+  const openBooking = (prefill = bookingPrefill) => {
+    setBookingPrefill(prefill || null);
+    setIsBookingOpen(true);
+  };
 
   // Scroll to top on page change
   useEffect(() => {
@@ -1118,14 +1251,20 @@ const App = () => {
       <Navbar
         lang={lang}
         setLang={setLang}
-        openBooking={() => setIsBookingOpen(true)}
+        openBooking={() => openBooking(null)}
         page={page}
         setPage={setPage}
       />
 
       <main>
-        {page === 'home' && <HomePage lang={lang} openBooking={() => setIsBookingOpen(true)} />}
-        {page === 'wrap' && <WrapPage lang={lang} openBooking={() => setIsBookingOpen(true)} />}
+        {page === 'home' && (
+          <HomePage
+            lang={lang}
+            openBooking={openBooking}
+            setBookingPrefill={setBookingPrefill}
+          />
+        )}
+        {page === 'wrap' && <WrapPage lang={lang} openBooking={() => openBooking(null)} />}
       </main>
 
       {/* Sticky Mobile Bar */}
@@ -1134,7 +1273,7 @@ const App = () => {
           <Phone size={18} /> {lang === 'fr' ? 'Appeler' : 'Call'}
         </a>
         <button
-          onClick={() => setIsBookingOpen(true)}
+          onClick={() => openBooking(null)}
           className="flex-1 bg-amber-400 text-black py-3 rounded font-bold uppercase tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-400/20 active:bg-amber-500"
         >
           <Calendar size={18} /> {lang === 'fr' ? 'Réserver' : 'Book'}
@@ -1214,6 +1353,7 @@ const App = () => {
         isOpen={isBookingOpen}
         onClose={() => setIsBookingOpen(false)}
         lang={lang}
+        prefill={bookingPrefill}
       />
     </div>
   );
