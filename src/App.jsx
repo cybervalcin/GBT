@@ -71,8 +71,8 @@ const INSTAGRAM_POSTS = [
   {
     id: 1,
     likes: 243,
-    img: instagramPorsche,
-    desc: "Porsche — Protection et finition premium.",
+    img: instagramAudiRs6,
+    desc: "Audi RS6 — Détails complets & protection.",
     link: THEME.links.instagram
   },
   {
@@ -85,8 +85,8 @@ const INSTAGRAM_POSTS = [
   {
     id: 3,
     likes: 95,
-    img: instagramAudiRs6,
-    desc: "Audi RS6 — Détails complets & protection.",
+    img: instagramPorsche,
+    desc: "Porsche — Protection et finition premium.",
     link: THEME.links.instagram
   },
   {
