@@ -900,9 +900,13 @@ const HomePage = ({ lang, openBooking }) => {
                   { title: 'Priorité', sub: 'Booking' },
                   { title: 'Lave-glace', sub: 'Gratuit' },
                 ].map((perk, i) => (
-                  <div key={i} className="bg-neutral-950/50 p-6 rounded-xl border border-white/5 text-center cursor-default hover:bg-neutral-900 transition-colors">
-                    <div className="text-amber-400 font-bold text-xl mb-1">{perk.title}</div>
-                    <div className="text-neutral-500 text-sm uppercase tracking-wide">{perk.sub}</div>
+                  <div key={i} className="bg-neutral-950/50 p-5 sm:p-6 rounded-xl border border-white/5 text-center cursor-default hover:bg-neutral-900 transition-colors">
+                    <div className="text-amber-400 font-bold leading-tight text-[clamp(1rem,3.4vw,1.4rem)] sm:text-xl md:text-2xl break-words whitespace-normal">
+                      {perk.title}
+                    </div>
+                    <div className="text-neutral-500 text-xs sm:text-sm uppercase tracking-wide mt-2">
+                      {perk.sub}
+                    </div>
                   </div>
                 ))}
               </div>
