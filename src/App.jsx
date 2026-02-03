@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import hero4k from './assets/hero-4k.jpg';
 import hero3x2 from './assets/hero-3x2.jpg';
 import heroPortrait from './assets/hero-portrait.jpg';
+import beforeCompare from './assets/before.jpg';
+import afterCompare from './assets/after.jpg';
 import serviceCeramic from './assets/service-protection-ceramique.jpg';
 import serviceCorrection from './assets/service-correction-peinture.jpg';
 import serviceDetailing from './assets/service-esthetique-complete.jpg';
@@ -52,7 +54,8 @@ const THEME = {
       correction: serviceCorrection,
       detailing: serviceDetailing
     },
-    compare: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1200&auto=format&fit=crop",
+    compareBefore: beforeCompare,
+    compareAfter: afterCompare,
     wrap: "https://images.unsplash.com/photo-1626847037657-fd3622613ce3?q=80&w=1000&auto=format&fit=crop"
   },
   links: {
@@ -340,20 +343,18 @@ const BeforeAfterSlider = () => {
       onTouchMove={handleMove}
     >
       <div className="absolute inset-0">
-        <img src={THEME.images.compare} alt="After" className="w-full h-full object-cover" onError={handleImageError} />
+        <img src={THEME.images.compareAfter} alt="After" className="w-full h-full object-cover" onError={handleImageError} />
         <div className="absolute top-4 right-4 bg-amber-400 text-black font-bold px-3 py-1 rounded text-xs z-10 shadow-lg">APRÈS / AFTER</div>
       </div>
 
       <div className="absolute inset-0 overflow-hidden border-r-2 border-amber-400" style={{ width: `${sliderPosition}%` }}>
         <div className="relative h-full" style={{ width: containerWidth ? `${containerWidth}px` : '100vw' }}>
           <img
-            src={THEME.images.compare}
+            src={THEME.images.compareBefore}
             alt="Before"
             className="w-full h-full object-cover"
-            style={{ filter: 'grayscale(100%) brightness(0.6) sepia(0.2) contrast(1.2) blur(0.5px)' }}
             onError={handleImageError}
           />
-          <div className="absolute inset-0 bg-neutral-500/10 mix-blend-overlay"></div>
         </div>
         <div className="absolute top-4 left-4 bg-neutral-900 text-white font-bold px-3 py-1 rounded text-xs border border-neutral-700 z-10 shadow-lg">AVANT / BEFORE</div>
       </div>
