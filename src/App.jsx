@@ -15,6 +15,11 @@ import serviceDetailing from './assets/service-esthetique-complete.jpg';
 import protectionPrestigeLogo from './assets/Protection-Prestige-Transparent-logo-640x160px.png';
 import {
   Car,
+  CarFront,
+  Truck,
+  Gauge,
+  Zap,
+  Bike,
   Calendar,
   Shield,
   Sparkles,
@@ -260,10 +265,10 @@ const SERVICES_HIGHLIGHTS = [
 ];
 
 const POPULAR_MODELS = [
-  { label: 'Audi Q5', make: 'Audi', model: 'Q5', type: 'vus' },
-  { label: 'BMW M3', make: 'BMW', model: 'M3', type: 'berline' },
-  { label: 'Tesla Model 3', make: 'Tesla', model: 'Model 3', type: 'electrique' },
-  { label: 'Range Rover Sport', make: 'Range Rover', model: 'Sport', type: 'vus' }
+  { label: 'Audi Q5', make: 'Audi', model: 'Q5', type: 'suv' },
+  { label: 'BMW M3', make: 'BMW', model: 'M3', type: 'sedan' },
+  { label: 'Tesla Model 3', make: 'Tesla', model: 'Model 3', type: 'electric' },
+  { label: 'Range Rover Sport', make: 'Range Rover', model: 'Sport', type: 'suv' }
 ];
 
 const BRAND_BADGES = [
@@ -583,15 +588,6 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
-  const vehicleTypes = [
-    { id: 'berline', label: { fr: 'Berline', en: 'Sedan' } },
-    { id: 'vus', label: { fr: 'VUS', en: 'SUV' } },
-    { id: 'camion', label: { fr: 'Camion', en: 'Truck' } },
-    { id: 'exotique', label: { fr: 'Exotique', en: 'Exotic' } },
-    { id: 'electrique', label: { fr: 'Électrique', en: 'Electric' } },
-    { id: 'moto', label: { fr: 'Moto', en: 'Motorcycle' } },
-  ];
-
   const conditionOptions = [
     { val: 'new', label: { fr: 'Neuf / Excellent', en: 'New / Excellent' }, desc: { fr: 'Peu ou pas de défauts', en: 'Few or no defects' } },
     { val: 'avg', label: { fr: 'Moyen', en: 'Average' }, desc: { fr: 'Quelques tourbillons, saleté normale', en: 'Some swirls, normal dirt' } },
@@ -616,6 +612,14 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
       sending: 'Envoi...',
       availability: 'Disponibilité (Demain)',
       required: 'Requis',
+      vehicleTypes: {
+        sedan: 'Berline',
+        suv: 'VUS',
+        pickup: 'Pick-up',
+        exotic: 'Exotique',
+        electric: 'Électrique',
+        motorcycle: 'Moto'
+      },
       vehicleDetailsTitle: 'Détails du véhicule',
       addDetailsOptional: 'Ajouter les détails du véhicule (optionnel)',
       makeLabel: 'Marque',
@@ -662,6 +666,14 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
       sending: 'Sending...',
       availability: 'Availability (Tomorrow)',
       required: 'Required',
+      vehicleTypes: {
+        sedan: 'Sedan',
+        suv: 'SUV',
+        pickup: 'Pickup',
+        exotic: 'Exotic',
+        electric: 'Electric',
+        motorcycle: 'Motorcycle'
+      },
       vehicleDetailsTitle: 'Vehicle details',
       addDetailsOptional: 'Add vehicle details (optional)',
       makeLabel: 'Make',
@@ -695,6 +707,15 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
 
   const bt = bookingText[lang];
 
+  const vehicleTypes = [
+    { id: 'sedan', label: bt.vehicleTypes.sedan, icon: Car },
+    { id: 'suv', label: bt.vehicleTypes.suv, icon: CarFront },
+    { id: 'pickup', label: bt.vehicleTypes.pickup, icon: Truck },
+    { id: 'exotic', label: bt.vehicleTypes.exotic, icon: Gauge },
+    { id: 'electric', label: bt.vehicleTypes.electric, icon: Zap },
+    { id: 'motorcycle', label: bt.vehicleTypes.motorcycle, icon: Bike }
+  ];
+
   // Reset state when opening
   useEffect(() => {
     if (isOpen) {
@@ -721,7 +742,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
 
   const wrapServiceIds = new Set(['tint_front', 'tint_rear', 'chrome_delete', 'full_wrap']);
   const isWrapSelected = formData.service.some((id) => wrapServiceIds.has(id));
-  const requiresDetailsByType = ['exotique', 'moto'].includes(formData.vehicle.type);
+  const requiresDetailsByType = ['exotic', 'motorcycle'].includes(formData.vehicle.type);
   const requiresDetails = isWrapSelected || requiresDetailsByType;
   const requiresYear = isWrapSelected || requiresDetailsByType;
   const hasAnyDetails = [
@@ -731,7 +752,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
     formData.vehicle.notes?.trim()
   ].some(Boolean);
 
-  const selectedTypeLabel = vehicleTypes.find((type) => type.id === formData.vehicle.type)?.label[lang] || bt.summaryNotProvided;
+  const selectedTypeLabel = vehicleTypes.find((type) => type.id === formData.vehicle.type)?.label || bt.summaryNotProvided;
   const summaryMakeModel = formData.vehicle.make.trim() && formData.vehicle.model.trim()
     ? `${formData.vehicle.make.trim()} ${formData.vehicle.model.trim()}`
     : bt.summaryNotProvided;
@@ -833,7 +854,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
         services
       },
       vehicle: {
-        type: selectedType?.label.fr || '',
+        type: selectedType?.label || '',
         make: formData.vehicle.make.trim(),
         model: formData.vehicle.model.trim(),
         year: formData.vehicle.year.trim(),
@@ -926,16 +947,19 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                     {bt.step1Title}
                   </h4>
                   <div className="grid grid-cols-2 gap-4">
-                    {vehicleTypes.map(type => (
+                    {vehicleTypes.map(type => {
+                      const Icon = type.icon;
+                      return (
                       <button
                         key={type.id}
                         onClick={() => updateVehicleType(type.id)}
                         className={`p-4 rounded-xl border-2 flex flex-col items-center gap-3 transition-all ${formData.vehicle.type === type.id ? 'border-amber-400 bg-amber-400/10 text-white' : 'border-neutral-800 bg-neutral-800/50 text-neutral-400 hover:border-neutral-600'}`}
                       >
-                        <Car size={32} />
-                        <span className="font-bold">{type.label[lang]}</span>
+                        <Icon size={32} />
+                        <span className="font-bold">{type.label}</span>
                       </button>
-                    ))}
+                      );
+                    })}
                   </div>
                   {errors.type && (
                     <p className="text-sm text-red-400">{errors.type}</p>
