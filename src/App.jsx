@@ -558,16 +558,28 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
   const [submitted, setSubmitted] = useState(false);
 
   const [formData, setFormData] = useState({
-    vehicle: { type: '', make: '', model: '' },
+    vehicle: { type: '', make: '', model: '', year: '', notes: '' },
     condition: '',
     service: [], // Changed to array for multiple selections if needed, keeping simple for now
     date: { time: '' },
     contact: { name: '', email: '', phone: '' }
   });
+  const [showDetails, setShowDetails] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const toggleService = (serviceId) => {
     // For now, single select logic for simplicity in this flow, but adaptable
-    setFormData({ ...formData, service: [serviceId] });
+    setFormData((prev) => ({ ...prev, service: [serviceId] }));
+  };
+
+  const updateVehicleType = (typeId) => {
+    setFormData((prev) => ({ ...prev, vehicle: { ...prev.vehicle, type: typeId } }));
+    setErrors((prev) => ({ ...prev, type: undefined }));
+  };
+
+  const updateVehicleField = (field, value) => {
+    setFormData((prev) => ({ ...prev, vehicle: { ...prev.vehicle, [field]: value } }));
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const vehicleTypes = [
@@ -585,17 +597,118 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
     { val: 'bad', label: { fr: 'Intense', en: 'Heavy' }, desc: { fr: "Rayures, poils d'animaux, calcium", en: 'Scratches, pet hair, calcium' } },
   ];
 
+  const bookingText = {
+    fr: {
+      title: 'Réservation',
+      confirmed: 'Confirmé',
+      subtitle: 'Esthétique Automobile GBT - Mascouche',
+      requestReceived: 'Demande Reçue !',
+      requestBody: "Merci pour votre confiance. Un membre de l'équipe GBT vous contactera d'ici 2 heures pour confirmer le rendez-vous.",
+      backToSite: 'Retour au site',
+      step1Title: 'Quel est votre véhicule ?',
+      step2Title: 'Condition actuelle',
+      step3Title: 'Services requis',
+      step4Title: 'Vos coordonnées',
+      back: 'Retour',
+      next: 'Suivant',
+      confirm: 'Confirmer',
+      sending: 'Envoi...',
+      availability: 'Disponibilité (Demain)',
+      required: 'Requis',
+      vehicleDetailsTitle: 'Détails du véhicule',
+      addDetailsOptional: 'Ajouter les détails du véhicule (optionnel)',
+      makeLabel: 'Marque',
+      makeHelp: 'Ex : Toyota',
+      modelLabel: 'Modèle',
+      modelHelp: 'Ex : Corolla',
+      yearLabel: 'Année',
+      yearHelp: 'Ex : 2021',
+      notesLabel: 'Notes (optionnel)',
+      notesHelp: "Ex : peinture noire, micro-rayures, jantes, intérieur très sale",
+      fullName: 'Nom complet',
+      email: 'Email',
+      phone: 'Téléphone',
+      summaryTitle: 'Résumé',
+      summaryVehicle: 'Véhicule',
+      summaryType: 'Type',
+      summaryMakeModel: 'Marque/Modèle',
+      summaryYear: 'Année',
+      summaryNotProvided: 'Non précisé',
+      validation: {
+        typeRequired: 'Veuillez choisir un type de véhicule.',
+        makeRequired: 'Veuillez ajouter la marque.',
+        modelRequired: 'Veuillez ajouter le modèle.',
+        makeNeeded: 'Veuillez ajouter la marque.',
+        modelNeeded: 'Veuillez ajouter le modèle.',
+        yearRequired: 'Veuillez ajouter l’année.',
+        yearInvalid: 'Année invalide (1900–2099).'
+      }
+    },
+    en: {
+      title: 'Booking',
+      confirmed: 'Confirmed',
+      subtitle: 'GBT Auto Aesthetics - Mascouche',
+      requestReceived: 'Request Received!',
+      requestBody: 'Thank you for trusting us. A GBT team member will contact you within 2 hours to confirm the appointment.',
+      backToSite: 'Back to site',
+      step1Title: 'What is your vehicle?',
+      step2Title: 'Current condition',
+      step3Title: 'Required services',
+      step4Title: 'Your details',
+      back: 'Back',
+      next: 'Next',
+      confirm: 'Confirm',
+      sending: 'Sending...',
+      availability: 'Availability (Tomorrow)',
+      required: 'Required',
+      vehicleDetailsTitle: 'Vehicle details',
+      addDetailsOptional: 'Add vehicle details (optional)',
+      makeLabel: 'Make',
+      makeHelp: 'E.g., Toyota',
+      modelLabel: 'Model',
+      modelHelp: 'E.g., Corolla',
+      yearLabel: 'Year',
+      yearHelp: 'E.g., 2021',
+      notesLabel: 'Notes (optional)',
+      notesHelp: 'E.g., black paint, micro-scratches, wheels, very dirty interior',
+      fullName: 'Full name',
+      email: 'Email',
+      phone: 'Phone',
+      summaryTitle: 'Summary',
+      summaryVehicle: 'Vehicle',
+      summaryType: 'Type',
+      summaryMakeModel: 'Make/Model',
+      summaryYear: 'Year',
+      summaryNotProvided: 'Not provided',
+      validation: {
+        typeRequired: 'Please select a vehicle type.',
+        makeRequired: 'Please add the make.',
+        modelRequired: 'Please add the model.',
+        makeNeeded: 'Please add the make.',
+        modelNeeded: 'Please add the model.',
+        yearRequired: 'Please add the year.',
+        yearInvalid: 'Invalid year (1900–2099).'
+      }
+    }
+  };
+
+  const bt = bookingText[lang];
+
   // Reset state when opening
   useEffect(() => {
     if (isOpen) {
       setStep(1);
       setSubmitted(false);
       setIsSubmitting(false);
+      setShowDetails(false);
+      setErrors({});
       setFormData({
         vehicle: {
           type: prefill?.type || '',
           make: prefill?.make || '',
-          model: prefill?.model || ''
+          model: prefill?.model || '',
+          year: prefill?.year || '',
+          notes: prefill?.notes || ''
         },
         condition: '',
         service: [],
@@ -605,14 +718,156 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
     }
   }, [isOpen, prefill]);
 
+  const wrapServiceIds = new Set(['tint_front', 'tint_rear', 'chrome_delete', 'full_wrap']);
+  const isWrapSelected = formData.service.some((id) => wrapServiceIds.has(id));
+  const requiresDetailsByType = ['exotique', 'moto'].includes(formData.vehicle.type);
+  const requiresDetails = isWrapSelected || requiresDetailsByType;
+  const requiresYear = isWrapSelected || requiresDetailsByType;
+  const hasAnyDetails = [
+    formData.vehicle.make?.trim(),
+    formData.vehicle.model?.trim(),
+    formData.vehicle.year?.trim(),
+    formData.vehicle.notes?.trim()
+  ].some(Boolean);
+
+  const selectedTypeLabel = vehicleTypes.find((type) => type.id === formData.vehicle.type)?.label[lang] || bt.summaryNotProvided;
+  const summaryMakeModel = formData.vehicle.make.trim() && formData.vehicle.model.trim()
+    ? `${formData.vehicle.make.trim()} ${formData.vehicle.model.trim()}`
+    : bt.summaryNotProvided;
+  const summaryYear = formData.vehicle.year.trim() || bt.summaryNotProvided;
+
+  useEffect(() => {
+    if (requiresDetails || hasAnyDetails) {
+      setShowDetails(true);
+    }
+  }, [requiresDetails, hasAnyDetails]);
+
   if (!isOpen) return null;
 
-  const nextStep = () => setStep(step + 1);
+  const validateVehicleDetails = () => {
+    const nextErrors = {};
+    if (!formData.vehicle.type) {
+      nextErrors.type = bt.validation.typeRequired;
+    }
+
+    const make = formData.vehicle.make.trim();
+    const model = formData.vehicle.model.trim();
+    const year = formData.vehicle.year.trim();
+
+    const makeValid = make.length >= 2;
+    const modelValid = model.length >= 1;
+    const yearValid = !year
+      ? true
+      : /^\d{4}$/.test(year) && Number(year) >= 1900 && Number(year) <= 2099;
+
+    if (requiresDetails) {
+      if (!makeValid) nextErrors.make = bt.validation.makeRequired;
+      if (!modelValid) nextErrors.model = bt.validation.modelRequired;
+      if (requiresYear) {
+        if (!year) nextErrors.year = bt.validation.yearRequired;
+        if (year && !yearValid) nextErrors.year = bt.validation.yearInvalid;
+      } else if (year && !yearValid) {
+        nextErrors.year = bt.validation.yearInvalid;
+      }
+    } else if (showDetails) {
+      if ((make && !modelValid) || (!make && model)) {
+        if (!make) nextErrors.make = bt.validation.makeNeeded;
+        if (!model) nextErrors.model = bt.validation.modelNeeded;
+      }
+      if (year && !yearValid) {
+        nextErrors.year = bt.validation.yearInvalid;
+      }
+    }
+
+    return {
+      valid: Object.keys(nextErrors).length === 0,
+      errors: nextErrors
+    };
+  };
+
+  const parsePriceFrom = (priceLabel) => {
+    if (!priceLabel) return null;
+    let numeric = priceLabel.replace(/[^\d.,]/g, '');
+    if (numeric.includes(',') && numeric.includes('.')) {
+      numeric = numeric.replace(/,/g, '');
+    } else if (numeric.includes(',')) {
+      numeric = numeric.replace(',', '.');
+    }
+    const value = Number.parseFloat(numeric);
+    return Number.isNaN(value) ? null : value;
+  };
+
+  const buildBookingPayload = () => {
+    const fullName = formData.contact.name.trim();
+    const [firstName = '', ...lastParts] = fullName.split(/\s+/);
+    const lastName = lastParts.join(' ');
+
+    const bookingDate = new Date();
+    bookingDate.setDate(bookingDate.getDate() + 1);
+    const date = bookingDate.toISOString().slice(0, 10);
+
+    const allServices = Object.values(PRICING_DATA).flatMap((category) => category.items);
+    const services = allServices
+      .filter((item) => formData.service.includes(item.id))
+      .map((item) => ({
+        id: item.id,
+        name: item.name[lang],
+        priceFrom: parsePriceFrom(item.price[lang])
+      }));
+
+    const selectedType = vehicleTypes.find((type) => type.id === formData.vehicle.type);
+
+    return {
+      locale: lang === 'fr' ? 'fr-CA' : 'en-US',
+      customer: {
+        firstName,
+        lastName,
+        email: formData.contact.email.trim(),
+        phone: formData.contact.phone.trim()
+      },
+      booking: {
+        location: 'Mascouche',
+        date,
+        time: formData.date.time,
+        services
+      },
+      vehicle: {
+        type: selectedType?.label.fr || '',
+        make: formData.vehicle.make.trim(),
+        model: formData.vehicle.model.trim(),
+        year: formData.vehicle.year.trim(),
+        notes: formData.vehicle.notes.trim()
+      }
+    };
+  };
+
+  const nextStep = () => {
+    if (step === 1) {
+      const { valid, errors: nextErrors } = validateVehicleDetails();
+      if (!valid) {
+        setErrors(nextErrors);
+        return;
+      }
+      setErrors({});
+    }
+    if (step === 3 && requiresDetails) {
+      const { valid, errors: nextErrors } = validateVehicleDetails();
+      if (!valid) {
+        setErrors(nextErrors);
+        setStep(1);
+        return;
+      }
+      setErrors({});
+    }
+    setStep(step + 1);
+  };
+
   const prevStep = () => setStep(step - 1);
 
   const handleConfirm = () => {
     setIsSubmitting(true);
-    console.log("Booking Data Submitted:", formData);
+    const payload = buildBookingPayload();
+    console.log('Booking Payload:', payload);
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
@@ -628,10 +883,10 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
         <div className="p-6 border-b border-neutral-800 flex justify-between items-center bg-neutral-950">
           <div>
             <h3 className="text-xl font-bold text-white uppercase tracking-wider">
-              {submitted ? (lang === 'fr' ? 'Confirmé' : 'Confirmed') : (lang === 'fr' ? 'Réservation' : 'Booking')}
+              {submitted ? bt.confirmed : bt.title}
             </h3>
             <p className="text-xs text-neutral-400 mt-1">
-              {lang === 'fr' ? 'Esthétique Automobile GBT - Mascouche' : 'GBT Auto Aesthetics - Mascouche'}
+              {bt.subtitle}
             </p>
           </div>
           <button onClick={onClose} className="text-neutral-500 hover:text-white transition-colors p-2"><X /></button>
@@ -653,15 +908,13 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                 <CheckCircle size={48} />
               </div>
               <h4 className="text-3xl font-bold text-white mb-4">
-                {lang === 'fr' ? 'Demande Reçue !' : 'Request Received!'}
+                {bt.requestReceived}
               </h4>
               <p className="text-neutral-400 max-w-md mx-auto mb-8">
-                {lang === 'fr'
-                  ? "Merci pour votre confiance. Un membre de l'équipe GBT vous contactera d'ici 2 heures pour confirmer le rendez-vous."
-                  : "Thank you for trusting us. A GBT team member will contact you within 2 hours to confirm the appointment."}
+                {bt.requestBody}
               </p>
               <Button onClick={onClose} className="w-full max-w-xs">
-                {lang === 'fr' ? 'Retour au site' : 'Back to site'}
+                {bt.backToSite}
               </Button>
             </div>
           ) : (
@@ -669,13 +922,13 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
               {step === 1 && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                   <h4 className="text-2xl font-bold text-white mb-4">
-                    {lang === 'fr' ? 'Quel est votre véhicule ?' : 'What is your vehicle?'}
+                    {bt.step1Title}
                   </h4>
                   <div className="grid grid-cols-2 gap-4">
                     {vehicleTypes.map(type => (
                       <button
                         key={type.id}
-                        onClick={() => setFormData({ ...formData, vehicle: { ...formData.vehicle, type: type.id } })}
+                        onClick={() => updateVehicleType(type.id)}
                         className={`p-4 rounded-xl border-2 flex flex-col items-center gap-3 transition-all ${formData.vehicle.type === type.id ? 'border-amber-400 bg-amber-400/10 text-white' : 'border-neutral-800 bg-neutral-800/50 text-neutral-400 hover:border-neutral-600'}`}
                       >
                         <Car size={32} />
@@ -683,13 +936,97 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                       </button>
                     ))}
                   </div>
+                  {errors.type && (
+                    <p className="text-sm text-red-400">{errors.type}</p>
+                  )}
+
+                  {(formData.vehicle.type || requiresDetails || showDetails) && (
+                    (requiresDetails || showDetails) ? (
+                      <div className="border-t border-neutral-800 pt-6 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h5 className="text-xs uppercase tracking-widest text-neutral-400">{bt.vehicleDetailsTitle}</h5>
+                          {requiresDetails && (
+                            <span className="text-[11px] font-semibold uppercase text-amber-400">
+                              {bt.required}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-xs uppercase tracking-widest text-neutral-400">
+                              {bt.makeLabel}{requiresDetails && <span className="text-amber-400"> *</span>}
+                            </label>
+                            <input
+                              value={formData.vehicle.make}
+                              onChange={(e) => updateVehicleField('make', e.target.value)}
+                              className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
+                              aria-invalid={Boolean(errors.make)}
+                            />
+                            <p className="text-xs text-neutral-500 mt-1">{bt.makeHelp}</p>
+                            {errors.make && <p className="text-xs text-red-400 mt-1">{errors.make}</p>}
+                          </div>
+
+                          <div>
+                            <label className="text-xs uppercase tracking-widest text-neutral-400">
+                              {bt.modelLabel}{requiresDetails && <span className="text-amber-400"> *</span>}
+                            </label>
+                            <input
+                              value={formData.vehicle.model}
+                              onChange={(e) => updateVehicleField('model', e.target.value)}
+                              className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
+                              aria-invalid={Boolean(errors.model)}
+                            />
+                            <p className="text-xs text-neutral-500 mt-1">{bt.modelHelp}</p>
+                            {errors.model && <p className="text-xs text-red-400 mt-1">{errors.model}</p>}
+                          </div>
+
+                          <div>
+                            <label className="text-xs uppercase tracking-widest text-neutral-400">
+                              {bt.yearLabel}{requiresYear && <span className="text-amber-400"> *</span>}
+                            </label>
+                            <input
+                              value={formData.vehicle.year}
+                              onChange={(e) => updateVehicleField('year', e.target.value.replace(/[^\d]/g, '').slice(0, 4))}
+                              className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
+                              inputMode="numeric"
+                              aria-invalid={Boolean(errors.year)}
+                            />
+                            <p className="text-xs text-neutral-500 mt-1">{bt.yearHelp}</p>
+                            {errors.year && <p className="text-xs text-red-400 mt-1">{errors.year}</p>}
+                          </div>
+
+                          <div className="md:col-span-2">
+                            <label className="text-xs uppercase tracking-widest text-neutral-400">
+                              {bt.notesLabel}
+                            </label>
+                            <textarea
+                              value={formData.vehicle.notes}
+                              onChange={(e) => updateVehicleField('notes', e.target.value)}
+                              rows={3}
+                              className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none resize-none"
+                            />
+                            <p className="text-xs text-neutral-500 mt-1">{bt.notesHelp}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setShowDetails(true)}
+                        className="text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors"
+                      >
+                        {bt.addDetailsOptional}
+                      </button>
+                    )
+                  )}
                 </div>
               )}
 
               {step === 2 && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                   <h4 className="text-2xl font-bold text-white mb-4">
-                    {lang === 'fr' ? 'Condition actuelle' : 'Current Condition'}
+                    {bt.step2Title}
                   </h4>
                   <div className="space-y-3">
                     {conditionOptions.map(opt => (
@@ -712,7 +1049,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
               {step === 3 && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                   <h4 className="text-2xl font-bold text-white mb-4">
-                    {lang === 'fr' ? 'Services Requis' : 'Required Services'}
+                    {bt.step3Title}
                   </h4>
 
                   <div className="space-y-6">
@@ -751,29 +1088,29 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
               {step === 4 && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                   <h4 className="text-2xl font-bold text-white mb-4">
-                    {lang === 'fr' ? 'Vos Coordonnées' : 'Your Details'}
+                    {bt.step4Title}
                   </h4>
                   <div className="space-y-4">
                     <input
-                      placeholder={lang === 'fr' ? 'Nom complet' : 'Full name'}
+                      placeholder={bt.fullName}
                       className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
                       onChange={(e) => setFormData({ ...formData, contact: { ...formData.contact, name: e.target.value } })}
                     />
                     <input
-                      placeholder="Email"
+                      placeholder={bt.email}
                       type="email"
                       className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
                       onChange={(e) => setFormData({ ...formData, contact: { ...formData.contact, email: e.target.value } })}
                     />
                     <input
-                      placeholder={lang === 'fr' ? 'Téléphone' : 'Phone'}
+                      placeholder={bt.phone}
                       type="tel"
                       className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
                       onChange={(e) => setFormData({ ...formData, contact: { ...formData.contact, phone: e.target.value } })}
                     />
                     <div className="p-4 bg-neutral-800 rounded-lg">
                       <div className="text-neutral-400 text-xs uppercase tracking-wider mb-2">
-                        {lang === 'fr' ? 'Disponibilité (Demain)' : 'Availability (Tomorrow)'}
+                        {bt.availability}
                       </div>
                       <div className="flex gap-2">
                         {['09:00', '13:00', '15:00'].map(time => (
@@ -790,6 +1127,25 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                         ))}
                       </div>
                     </div>
+
+                    <div className="p-4 bg-neutral-900/60 border border-neutral-800 rounded-lg">
+                      <div className="text-xs uppercase tracking-wider text-neutral-400 mb-2">{bt.summaryTitle}</div>
+                      <div className="text-sm font-semibold text-white mb-3">{bt.summaryVehicle}</div>
+                      <div className="space-y-2 text-sm text-neutral-300">
+                        <div className="flex items-center justify-between">
+                          <span className="text-neutral-500">{bt.summaryType}</span>
+                          <span className="text-white font-semibold">{selectedTypeLabel}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-neutral-500">{bt.summaryMakeModel}</span>
+                          <span className="text-white font-semibold">{summaryMakeModel}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-neutral-500">{bt.summaryYear}</span>
+                          <span className="text-white font-semibold">{summaryYear}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -803,17 +1159,17 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
           <div className="p-6 border-t border-neutral-800 flex justify-between bg-neutral-950">
             {step > 1 ? (
               <Button variant="ghost" onClick={prevStep}>
-                {lang === 'fr' ? 'Retour' : 'Back'}
+                {bt.back}
               </Button>
             ) : <div></div>}
 
             {step < 4 ? (
               <Button onClick={nextStep} icon={ArrowRight}>
-                {lang === 'fr' ? 'Suivant' : 'Next'}
+                {bt.next}
               </Button>
             ) : (
               <Button onClick={handleConfirm} icon={isSubmitting ? null : CheckCircle} className={isSubmitting ? 'opacity-80 cursor-wait' : ''}>
-                {isSubmitting ? (lang === 'fr' ? 'Envoi...' : 'Sending...') : (lang === 'fr' ? 'Confirmer' : 'Confirm')}
+                {isSubmitting ? bt.sending : bt.confirm}
               </Button>
             )}
           </div>
