@@ -571,6 +571,12 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
     contact: { name: '', email: '', phone: '' }
   });
   const [showDetails, setShowDetails] = useState(false);
+  const [highlightDetails, setHighlightDetails] = useState(false);
+  const [pendingScroll, setPendingScroll] = useState(false);
+  const detailsRef = useRef(null);
+  const makeInputRef = useRef(null);
+  const prevRequiredRef = useRef(false);
+  const highlightTimeoutRef = useRef(null);
   const [errors, setErrors] = useState({});
 
   const toggleService = (serviceId) => {
@@ -723,6 +729,8 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
       setSubmitted(false);
       setIsSubmitting(false);
       setShowDetails(false);
+      setHighlightDetails(false);
+      setPendingScroll(false);
       setErrors({});
       setFormData({
         vehicle: {
@@ -763,6 +771,55 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
       setShowDetails(true);
     }
   }, [requiresDetails, hasAnyDetails]);
+
+  const flashDetails = () => {
+    if (highlightTimeoutRef.current) {
+      window.clearTimeout(highlightTimeoutRef.current);
+    }
+    setHighlightDetails(true);
+    highlightTimeoutRef.current = window.setTimeout(() => {
+      setHighlightDetails(false);
+      highlightTimeoutRef.current = null;
+    }, 600);
+  };
+
+  const scrollToVehicleDetails = () => {
+    requestAnimationFrame(() => {
+      detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      requestAnimationFrame(() => {
+        makeInputRef.current?.focus();
+        flashDetails();
+      });
+    });
+  };
+
+  useEffect(() => {
+    const wasRequired = prevRequiredRef.current;
+    const nowRequired = requiresDetails;
+    if (!wasRequired && nowRequired) {
+      setShowDetails(true);
+      setPendingScroll(true);
+      if (step !== 1) {
+        setStep(1);
+      }
+    }
+    prevRequiredRef.current = nowRequired;
+  }, [requiresDetails, step]);
+
+  useEffect(() => {
+    if (pendingScroll && step === 1) {
+      scrollToVehicleDetails();
+      setPendingScroll(false);
+    }
+  }, [pendingScroll, step]);
+
+  useEffect(() => {
+    return () => {
+      if (highlightTimeoutRef.current) {
+        window.clearTimeout(highlightTimeoutRef.current);
+      }
+    };
+  }, []);
 
   if (!isOpen) return null;
 
@@ -967,7 +1024,11 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
 
                   {(formData.vehicle.type || requiresDetails || showDetails) && (
                     (requiresDetails || showDetails) ? (
-                      <div className="border-t border-neutral-800 pt-6 space-y-4">
+                      <section
+                        ref={detailsRef}
+                        id="vehicle-details"
+                        className={`border-t border-neutral-800 pt-6 space-y-4 transition-shadow ${highlightDetails ? 'shadow-[0_0_0_2px_rgba(212,175,55,0.35)] rounded-xl' : ''}`}
+                      >
                         <div className="flex items-center justify-between">
                           <h5 className="text-xs uppercase tracking-widest text-neutral-400">{bt.vehicleDetailsTitle}</h5>
                           {requiresDetails && (
@@ -983,6 +1044,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                               {bt.makeLabel}{requiresDetails && <span className="text-amber-400"> *</span>}
                             </label>
                             <input
+                              ref={makeInputRef}
                               value={formData.vehicle.make}
                               onChange={(e) => updateVehicleField('make', e.target.value)}
                               className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
@@ -1034,11 +1096,14 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                             <p className="text-xs text-neutral-500 mt-1">{bt.notesHelp}</p>
                           </div>
                         </div>
-                      </div>
+                      </section>
                     ) : (
                       <button
                         type="button"
-                        onClick={() => setShowDetails(true)}
+                        onClick={() => {
+                          setShowDetails(true);
+                          setPendingScroll(true);
+                        }}
                         className="text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors"
                       >
                         {bt.addDetailsOptional}
