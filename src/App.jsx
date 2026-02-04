@@ -571,12 +571,11 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
     contact: { name: '', email: '', phone: '' }
   });
   const [showDetails, setShowDetails] = useState(false);
-  const [highlightDetails, setHighlightDetails] = useState(false);
   const [pendingScroll, setPendingScroll] = useState(false);
+  const [detailsAnimatedIn, setDetailsAnimatedIn] = useState(false);
   const detailsRef = useRef(null);
   const makeInputRef = useRef(null);
   const prevRequiredRef = useRef(false);
-  const highlightTimeoutRef = useRef(null);
   const [errors, setErrors] = useState({});
 
   const toggleService = (serviceId) => {
@@ -729,8 +728,8 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
       setSubmitted(false);
       setIsSubmitting(false);
       setShowDetails(false);
-      setHighlightDetails(false);
       setPendingScroll(false);
+      setDetailsAnimatedIn(false);
       setErrors({});
       setFormData({
         vehicle: {
@@ -772,23 +771,11 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
     }
   }, [requiresDetails, hasAnyDetails]);
 
-  const flashDetails = () => {
-    if (highlightTimeoutRef.current) {
-      window.clearTimeout(highlightTimeoutRef.current);
-    }
-    setHighlightDetails(true);
-    highlightTimeoutRef.current = window.setTimeout(() => {
-      setHighlightDetails(false);
-      highlightTimeoutRef.current = null;
-    }, 600);
-  };
-
   const scrollToVehicleDetails = () => {
     requestAnimationFrame(() => {
       detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       requestAnimationFrame(() => {
         makeInputRef.current?.focus();
-        flashDetails();
       });
     });
   };
@@ -814,12 +801,12 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
   }, [pendingScroll, step]);
 
   useEffect(() => {
-    return () => {
-      if (highlightTimeoutRef.current) {
-        window.clearTimeout(highlightTimeoutRef.current);
-      }
-    };
-  }, []);
+    if (showDetails) {
+      setDetailsAnimatedIn(true);
+    } else {
+      setDetailsAnimatedIn(false);
+    }
+  }, [showDetails]);
 
   if (!isOpen) return null;
 
@@ -1027,7 +1014,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                       <section
                         ref={detailsRef}
                         id="vehicle-details"
-                        className={`border-t border-neutral-800 pt-6 space-y-4 transition-shadow ${highlightDetails ? 'shadow-[0_0_0_2px_rgba(212,175,55,0.35)] rounded-xl' : ''}`}
+                        className={`border-t border-neutral-800 pt-6 space-y-4 transition-all duration-300 ${detailsAnimatedIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
                       >
                         <div className="flex items-center justify-between">
                           <h5 className="text-xs uppercase tracking-widest text-neutral-400">{bt.vehicleDetailsTitle}</h5>
