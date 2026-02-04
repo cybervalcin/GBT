@@ -1091,7 +1091,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                           setShowDetails(true);
                           setPendingScroll(true);
                         }}
-                        className="text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors"
+                        className="w-full sm:w-auto text-center text-sm font-semibold text-amber-300 border border-amber-400/40 bg-amber-400/5 px-4 py-2.5 rounded-lg hover:bg-amber-400/10 hover:text-amber-200 transition-colors"
                       >
                         {bt.addDetailsOptional}
                       </button>
