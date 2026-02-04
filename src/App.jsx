@@ -1690,6 +1690,12 @@ const WrapPage = ({ lang, openBooking }) => {
             <div className="inline-block bg-[#7fc7e4]/20 text-[#7fc7e4] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6 border border-[#7fc7e4]/30">
               Partenaire Exclusif
             </div>
+            <img
+              src={protectionPrestigeLogo}
+              alt="Protection Prestige"
+              className="mt-2.5 mb-[18px] w-[220px] sm:w-[260px] md:w-[320px] lg:w-[360px] max-w-full h-auto object-contain"
+              loading="lazy"
+            />
             <h1 className="text-5xl md:text-6xl font-black text-white uppercase mb-6 leading-tight">
               Changement de couleur & <span className="text-[#7fc7e4]">Protection</span>
             </h1>
@@ -1698,20 +1704,6 @@ const WrapPage = ({ lang, openBooking }) => {
                 ? "Réalisé par nos experts partenaires chez Protection Prestige, directement dans nos installations de Mascouche."
                 : "Executed by our partners at Protection Prestige, right here in our Mascouche facility."}
             </p>
-
-            <div className="flex flex-wrap gap-4 mb-12">
-              <Button className="bg-[#7fc7e4] hover:bg-[#9ad7ee] hover:shadow-[0_0_20px_rgba(127,199,228,0.35)] text-black" onClick={openBooking}>
-                {lang === 'fr' ? 'Soumission Wrap' : 'Get Wrap Quote'}
-              </Button>
-              <div className="px-6 py-3 border border-neutral-700 rounded-md bg-neutral-950/40 flex items-center justify-center">
-                <img
-                  src={protectionPrestigeLogo}
-                  alt="Protection Prestige"
-                  className="h-8 md:h-9 w-auto opacity-90"
-                  loading="lazy"
-                />
-              </div>
-            </div>
 
             {/* Tableau de prix Wrap mis à jour */}
             <div className="grid md:grid-cols-2 gap-4">
@@ -1730,6 +1722,12 @@ const WrapPage = ({ lang, openBooking }) => {
                 <div className="text-3xl font-black text-white"><span className="text-sm font-normal text-neutral-500">à partir de</span> 2 999,95 $</div>
                 <div className="text-neutral-500 text-xs mt-1">Vinyle Premium (Avery/3M) • Garantie Incluse</div>
               </div>
+            </div>
+
+            <div className="mt-6 sm:mt-8">
+              <Button className="bg-[#7fc7e4] hover:bg-[#9ad7ee] hover:shadow-[0_0_20px_rgba(127,199,228,0.35)] text-black w-full sm:w-auto" onClick={openBooking}>
+                {lang === 'fr' ? 'Soumission Wrap' : 'Get Wrap Quote'}
+              </Button>
             </div>
           </div>
 
