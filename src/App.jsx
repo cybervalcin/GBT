@@ -573,8 +573,10 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [pendingScroll, setPendingScroll] = useState(false);
   const [detailsAnimatedIn, setDetailsAnimatedIn] = useState(false);
+  const [pendingOptionalScroll, setPendingOptionalScroll] = useState(false);
   const detailsRef = useRef(null);
   const makeInputRef = useRef(null);
+  const optionalButtonRef = useRef(null);
   const prevRequiredRef = useRef(false);
   const [errors, setErrors] = useState({});
 
@@ -730,6 +732,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
       setShowDetails(false);
       setPendingScroll(false);
       setDetailsAnimatedIn(false);
+      setPendingOptionalScroll(false);
       setErrors({});
       setFormData({
         vehicle: {
@@ -780,6 +783,12 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
     });
   };
 
+  const scrollToOptionalDetails = () => {
+    requestAnimationFrame(() => {
+      optionalButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  };
+
   useEffect(() => {
     const wasRequired = prevRequiredRef.current;
     const nowRequired = requiresDetails;
@@ -799,6 +808,20 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
       setPendingScroll(false);
     }
   }, [pendingScroll, step]);
+
+  useEffect(() => {
+    if (!formData.vehicle.type || requiresDetails || showDetails || step !== 1) return;
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      if (!window.matchMedia('(max-width: 767px)').matches) return;
+    }
+    setPendingOptionalScroll(true);
+  }, [formData.vehicle.type, requiresDetails, showDetails, step]);
+
+  useEffect(() => {
+    if (!pendingOptionalScroll) return;
+    scrollToOptionalDetails();
+    setPendingOptionalScroll(false);
+  }, [pendingOptionalScroll]);
 
   useEffect(() => {
     if (showDetails) {
@@ -1091,6 +1114,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                           setShowDetails(true);
                           setPendingScroll(true);
                         }}
+                        ref={optionalButtonRef}
                         className="w-full sm:w-auto text-center text-sm font-semibold text-amber-300 border border-amber-400/40 bg-amber-400/5 px-4 py-2.5 rounded-lg hover:bg-amber-400/10 hover:text-amber-200 transition-colors"
                       >
                         {bt.addDetailsOptional}
