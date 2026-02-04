@@ -1720,20 +1720,38 @@ const WrapPage = ({ lang, openBooking }) => {
 
             {/* Tableau de prix Wrap mis à jour */}
             <div className="grid md:grid-cols-2 gap-4 text-left">
-              <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl">
-                <div className="font-bold mb-1" style={{ color: 'var(--wrap-accent)' }}>Teinte de Lumières</div>
-                <div className="text-2xl font-black text-white">129,95 $ <span className="text-sm font-normal text-neutral-500">/ paire</span></div>
-                <div className="text-neutral-500 text-xs mt-1">Avant ou Arrière</div>
+              <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl relative overflow-hidden">
+                <div
+                  className="pointer-events-none absolute top-0 right-0 h-24 w-24 -translate-y-1/2 translate-x-1/2 rounded-full blur-2xl"
+                  style={{ backgroundColor: 'rgba(var(--wrap-accent-rgb), 0.12)' }}
+                ></div>
+                <div className="relative z-10">
+                  <div className="font-bold mb-1" style={{ color: 'var(--wrap-accent)' }}>Teinte de Lumières</div>
+                  <div className="text-2xl font-black text-white">129,95 $ <span className="text-sm font-normal text-neutral-500">/ paire</span></div>
+                  <div className="text-neutral-500 text-xs mt-1">Avant ou Arrière</div>
+                </div>
               </div>
-              <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl">
-                <div className="font-bold mb-1" style={{ color: 'var(--wrap-accent)' }}>Chrome Delete</div>
-                <div className="text-2xl font-black text-white"><span className="text-sm font-normal text-neutral-500">à partir de</span> 399,95 $</div>
-                <div className="text-neutral-500 text-xs mt-1">Finition Noir Gloss/Mat</div>
+              <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl relative overflow-hidden">
+                <div
+                  className="pointer-events-none absolute top-0 right-0 h-24 w-24 -translate-y-1/2 translate-x-1/2 rounded-full blur-2xl"
+                  style={{ backgroundColor: 'rgba(var(--wrap-accent-rgb), 0.12)' }}
+                ></div>
+                <div className="relative z-10">
+                  <div className="font-bold mb-1" style={{ color: 'var(--wrap-accent)' }}>Chrome Delete</div>
+                  <div className="text-2xl font-black text-white"><span className="text-sm font-normal text-neutral-500">à partir de</span> 399,95 $</div>
+                  <div className="text-neutral-500 text-xs mt-1">Finition Noir Gloss/Mat</div>
+                </div>
               </div>
-              <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl md:col-span-2">
-                <div className="font-bold mb-1" style={{ color: 'var(--wrap-accent)' }}>Wrap Complet</div>
-                <div className="text-3xl font-black text-white"><span className="text-sm font-normal text-neutral-500">à partir de</span> 2 999,95 $</div>
-                <div className="text-neutral-500 text-xs mt-1">Vinyle Premium (Avery/3M) • Garantie Incluse</div>
+              <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl md:col-span-2 relative overflow-hidden">
+                <div
+                  className="pointer-events-none absolute top-0 right-0 h-28 w-28 -translate-y-1/2 translate-x-1/2 rounded-full blur-2xl"
+                  style={{ backgroundColor: 'rgba(var(--wrap-accent-rgb), 0.12)' }}
+                ></div>
+                <div className="relative z-10">
+                  <div className="font-bold mb-1" style={{ color: 'var(--wrap-accent)' }}>Wrap Complet</div>
+                  <div className="text-3xl font-black text-white"><span className="text-sm font-normal text-neutral-500">à partir de</span> 2 999,95 $</div>
+                  <div className="text-neutral-500 text-xs mt-1">Vinyle Premium (Avery/3M) • Garantie Incluse</div>
+                </div>
               </div>
             </div>
 
