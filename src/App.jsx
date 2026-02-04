@@ -12,6 +12,7 @@ import logoWide from './assets/Horizontal-GBT-LOGO.png';
 import serviceCeramic from './assets/service-protection-ceramique.jpg';
 import serviceCorrection from './assets/service-correction-peinture.jpg';
 import serviceDetailing from './assets/service-esthetique-complete.jpg';
+import protectionPrestigeLogo from './assets/Protection-Prestige-Transparent-logo-640x160px.png';
 import {
   Car,
   Calendar,
@@ -1674,12 +1675,17 @@ const WrapPage = ({ lang, openBooking }) => {
                 : "Executed by our partners at Protection Prestige, right here in our Mascouche facility."}
             </p>
 
-            <div className="flex gap-4 mb-12">
+            <div className="flex flex-wrap gap-4 mb-12">
               <Button className="bg-[#7fc7e4] hover:bg-[#9ad7ee] hover:shadow-[0_0_20px_rgba(127,199,228,0.35)] text-black" onClick={openBooking}>
                 {lang === 'fr' ? 'Soumission Wrap' : 'Get Wrap Quote'}
               </Button>
-              <div className="px-6 py-3 border border-neutral-700 rounded-md text-neutral-400 flex items-center gap-2">
-                Powered by <span className="font-bold text-white">PROTECTION PRESTIGE</span>
+              <div className="px-6 py-3 border border-neutral-700 rounded-md bg-neutral-950/40 flex items-center justify-center">
+                <img
+                  src={protectionPrestigeLogo}
+                  alt="Protection Prestige"
+                  className="h-8 md:h-9 w-auto opacity-90"
+                  loading="lazy"
+                />
               </div>
             </div>
 
