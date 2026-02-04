@@ -1662,11 +1662,11 @@ const WrapPage = ({ lang, openBooking }) => {
       <div className="container mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row gap-12 items-center">
           <div className="md:w-1/2">
-            <div className="inline-block bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6 border border-blue-600/30">
+            <div className="inline-block bg-[#7fc7e4]/20 text-[#7fc7e4] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6 border border-[#7fc7e4]/30">
               Partenaire Exclusif
             </div>
             <h1 className="text-5xl md:text-6xl font-black text-white uppercase mb-6 leading-tight">
-              Changement de couleur & <span className="text-blue-500">Protection</span>
+              Changement de couleur & <span className="text-[#7fc7e4]">Protection</span>
             </h1>
             <p className="text-xl text-neutral-300 mb-8 leading-relaxed">
               {lang === 'fr'
@@ -1675,7 +1675,7 @@ const WrapPage = ({ lang, openBooking }) => {
             </p>
 
             <div className="flex gap-4 mb-12">
-              <Button className="bg-blue-600 hover:bg-blue-500 hover:shadow-blue-500/20 text-white" onClick={openBooking}>
+              <Button className="bg-[#7fc7e4] hover:bg-[#9ad7ee] hover:shadow-[0_0_20px_rgba(127,199,228,0.35)] text-black" onClick={openBooking}>
                 {lang === 'fr' ? 'Soumission Wrap' : 'Get Wrap Quote'}
               </Button>
               <div className="px-6 py-3 border border-neutral-700 rounded-md text-neutral-400 flex items-center gap-2">
@@ -1686,17 +1686,17 @@ const WrapPage = ({ lang, openBooking }) => {
             {/* Tableau de prix Wrap mis à jour */}
             <div className="grid md:grid-cols-2 gap-4">
               <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl">
-                <div className="text-blue-400 font-bold mb-1">Teinte de Lumières</div>
+                <div className="text-[#7fc7e4] font-bold mb-1">Teinte de Lumières</div>
                 <div className="text-2xl font-black text-white">129,95 $ <span className="text-sm font-normal text-neutral-500">/ paire</span></div>
                 <div className="text-neutral-500 text-xs mt-1">Avant ou Arrière</div>
               </div>
               <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl">
-                <div className="text-blue-400 font-bold mb-1">Chrome Delete</div>
+                <div className="text-[#7fc7e4] font-bold mb-1">Chrome Delete</div>
                 <div className="text-2xl font-black text-white"><span className="text-sm font-normal text-neutral-500">à partir de</span> 399,95 $</div>
                 <div className="text-neutral-500 text-xs mt-1">Finition Noir Gloss/Mat</div>
               </div>
               <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl md:col-span-2">
-                <div className="text-blue-400 font-bold mb-1">Wrap Complet</div>
+                <div className="text-[#7fc7e4] font-bold mb-1">Wrap Complet</div>
                 <div className="text-3xl font-black text-white"><span className="text-sm font-normal text-neutral-500">à partir de</span> 2 999,95 $</div>
                 <div className="text-neutral-500 text-xs mt-1">Vinyle Premium (Avery/3M) • Garantie Incluse</div>
               </div>
@@ -1711,7 +1711,7 @@ const WrapPage = ({ lang, openBooking }) => {
                 className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
                 onError={handleImageError}
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-neutral-900/80 mix-blend-multiply"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#7fc7e4]/20 to-neutral-900/80 mix-blend-multiply"></div>
 
               {/* Visual Representation of Wrap */}
               <div className="absolute inset-0 flex items-center justify-center">
@@ -1720,7 +1720,7 @@ const WrapPage = ({ lang, openBooking }) => {
                   <div className="absolute inset-0 bg-neutral-200 flex items-center justify-center">
                     <span className="text-black/20 font-black text-4xl rotate-12">ORIGINAL</span>
                   </div>
-                  <div className="absolute inset-0 bg-blue-600 clip-path-diagonal group-hover:w-full transition-all duration-1000 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-[#7fc7e4] clip-path-diagonal group-hover:w-full transition-all duration-1000 flex items-center justify-center">
                     <span className="text-white/20 font-black text-4xl rotate-12">WRAPPED</span>
                   </div>
                   <div className="absolute bottom-4 left-4 text-black font-bold text-xs bg-white px-2 py-1 rounded z-10 shadow-lg">MATTE BLUE METALLIC</div>
