@@ -448,7 +448,11 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
           <button onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')} className="text-neutral-500 hover:text-white font-bold text-sm">
             {lang === 'fr' ? 'EN' : 'FR'}
           </button>
-          <Button onClick={openBooking} icon={Calendar} className="text-base px-7 py-3.5">
+          <Button
+            onClick={openBooking}
+            icon={Calendar}
+            className="text-base px-7 py-3.5 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 hover:from-amber-200 hover:via-amber-300 hover:to-amber-500 shadow-[0_0_18px_rgba(212,175,55,0.35)]"
+          >
             {lang === 'fr' ? 'Réserver' : 'Book Now'}
           </Button>
         </div>
@@ -2266,7 +2270,7 @@ const App = () => {
         </a>
         <button
           onClick={() => openBooking()}
-          className="flex-1 bg-amber-400 text-black py-3 rounded font-bold uppercase tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-400/20 active:bg-amber-500"
+          className="flex-1 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 text-black py-3 rounded font-bold uppercase tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-400/20 hover:from-amber-200 hover:via-amber-300 hover:to-amber-500 active:opacity-90"
         >
           <Calendar size={18} /> {lang === 'fr' ? 'Réserver' : 'Book'}
         </button>
