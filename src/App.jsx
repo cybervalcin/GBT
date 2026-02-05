@@ -466,6 +466,17 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
       {/* Mobile Menu */}
       {mobileMenu && (
         <div className="md:hidden absolute top-full left-0 w-full bg-neutral-900 border-b border-neutral-800 p-7 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-2">
+          <div className="flex items-center justify-between rounded-lg border border-neutral-800 bg-neutral-950/60 px-4 py-3">
+            <span className="text-xs uppercase tracking-widest text-neutral-400">
+              {lang === 'fr' ? 'Langue' : 'Language'}
+            </span>
+            <button
+              onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+              className="text-neutral-200 font-bold text-sm uppercase tracking-wider hover:text-amber-400 transition-colors"
+            >
+              {lang === 'fr' ? 'EN' : 'FR'}
+            </button>
+          </div>
           {navItems.map((item) => (
             <button
               key={item.label}
@@ -1958,7 +1969,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
                 </Button>
               </div>
 
-              <div className="md:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+              <div className="md:w-1/2 grid grid-cols-2 gap-4 w-full">
                 {[
                   { title: '1 Lavage/mois', mobileTitle: ['1 Lavage', 'par mois'], sub: 'Inclus' },
                   { title: '10% Rabais', sub: 'Services' },
@@ -2336,9 +2347,17 @@ const App = () => {
 
           <div className="border-t border-neutral-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>© 2026 GBT Aesthetics. All rights reserved.</div>
-            <div className="flex gap-2 items-center text-xs">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              {lang === 'fr' ? 'Système Opérationnel' : 'System Operational'}
+            <div className="flex gap-4 items-center text-xs">
+              <button
+                onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+                className="text-neutral-300 font-semibold uppercase tracking-wider hover:text-amber-400 transition-colors"
+              >
+                {lang === 'fr' ? 'EN' : 'FR'}
+              </button>
+              <div className="flex gap-2 items-center">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                {lang === 'fr' ? 'Système Opérationnel' : 'System Operational'}
+              </div>
             </div>
           </div>
         </div>
