@@ -466,17 +466,6 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
       {/* Mobile Menu */}
       {mobileMenu && (
         <div className="md:hidden absolute top-full left-0 w-full bg-neutral-900 border-b border-neutral-800 p-7 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-2">
-          <div className="flex items-center justify-between rounded-lg border border-neutral-800 bg-neutral-950/60 px-4 py-3">
-            <span className="text-xs uppercase tracking-widest text-neutral-400">
-              {lang === 'fr' ? 'Langue' : 'Language'}
-            </span>
-            <button
-              onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-              className="text-neutral-200 font-bold text-sm uppercase tracking-wider hover:text-amber-400 transition-colors"
-            >
-              {lang === 'fr' ? 'EN' : 'FR'}
-            </button>
-          </div>
           {navItems.map((item) => (
             <button
               key={item.label}
