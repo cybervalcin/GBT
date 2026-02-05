@@ -412,7 +412,7 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 py-4' : 'bg-transparent py-8'}`}>
-      <div className="container mx-auto px-6 md:px-8 flex justify-between items-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         {/* Logo */}
         <div 
           onClick={() => setPage('home')}
@@ -517,7 +517,7 @@ const BeforeAfterSlider = () => {
 
   return (
     <div
-      className="relative w-full h-[400px] md:h-[600px] rounded-xl overflow-hidden cursor-col-resize select-none border border-neutral-800 shadow-2xl bg-neutral-900 group"
+      className="relative w-full h-[280px] sm:h-[380px] md:h-[600px] rounded-xl overflow-hidden cursor-col-resize select-none border border-neutral-800 shadow-2xl bg-neutral-900 group"
       ref={containerRef}
       onMouseMove={handleMove}
       onTouchMove={handleMove}
@@ -1184,7 +1184,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
-      <div className="bg-neutral-900 w-full max-w-2xl rounded-2xl shadow-2xl border border-neutral-800 overflow-hidden relative z-10 flex flex-col max-h-[90vh]">
+      <div className="bg-neutral-900 w-full max-w-2xl rounded-2xl shadow-2xl border border-neutral-800 overflow-hidden relative z-10 flex flex-col max-h-[90svh]">
 
         {/* Header */}
         <div className="p-6 border-b border-neutral-800 flex justify-between items-center bg-neutral-950">
@@ -1207,7 +1207,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
         )}
 
         {/* Content */}
-        <div className="p-8 flex-1 overflow-y-auto">
+        <div className="p-6 sm:p-8 flex-1 overflow-y-auto">
 
           {submitted ? (
             <div className="flex flex-col items-center justify-center h-full text-center py-12 animate-in fade-in zoom-in duration-500">
@@ -1231,7 +1231,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
                   <h4 className="text-2xl font-bold text-white mb-4">
                     {bt.step1Title}
                   </h4>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {vehicleTypes.map(type => {
                       const Icon = type.icon;
                       return (
@@ -1648,7 +1648,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
   return (
     <div className="w-full">
       {/* HERO SECTION */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden" id="home">
+      <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden" id="home">
         {/* Background Image with Dark Overlay */}
         <div className="absolute inset-0 z-0">
           <picture>
@@ -1674,18 +1674,18 @@ const HomePage = ({ lang, openBooking, setPage }) => {
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         </div>
 
-        <div className="container mx-auto px-6 relative z-10 pt-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-sm font-bold uppercase tracking-widest mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
               <Star size={14} className="fill-amber-400" />
               {lang === 'fr' ? '#1 Esthétique Auto Rive-Nord' : '#1 Auto Detailing North Shore'}
             </div>
 
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase leading-[0.9] mb-6 tracking-tighter animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100 drop-shadow-2xl">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase leading-[0.9] mb-6 tracking-tighter animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100 drop-shadow-2xl">
               {lang === 'fr' ? <span>L'Art de la<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600">Perfection</span></span> : <span>The Art of<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600">Perfection</span></span>}
             </h1>
 
-            <p className="text-lg md:text-xl text-neutral-300 mb-10 max-w-2xl mx-auto font-light leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200 drop-shadow-md">
+            <p className="text-base sm:text-lg md:text-xl text-neutral-300 mb-10 max-w-2xl mx-auto font-light leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200 drop-shadow-md">
               {lang === 'fr'
                 ? "Redonnez à votre véhicule son éclat de salle de montre. Protection céramique, esthétique complète et restauration de précision à Mascouche."
                 : "Restore your vehicle to showroom shine. Ceramic coating, full detailing, and precision restoration in Mascouche."}
@@ -1709,7 +1709,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
                 ))}
               </div>
               <div className="flex justify-center">
-                <Button className="h-12 rounded-xl px-8" icon={ArrowRight} onClick={() => openBooking({ entry: 'browse_services' })}>
+                <Button className="h-12 rounded-xl px-8 w-full sm:w-auto" icon={ArrowRight} onClick={() => openBooking({ entry: 'browse_services' })}>
                   {lang === 'fr' ? 'Voir Nos Forfaits' : 'See Packages'}
                 </Button>
               </div>
@@ -1735,7 +1735,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
 
       {/* SOCIAL PROOF */}
       <section className="py-12 bg-neutral-950 border-b border-neutral-900">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative">
             <div className="text-center mb-6 md:mb-8">
               <div className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2">
@@ -1846,13 +1846,13 @@ const HomePage = ({ lang, openBooking, setPage }) => {
 
       {/* SERVICES GRID */}
       <section className="py-24 bg-neutral-950 relative" id="services">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             title={lang === 'fr' ? "Nos Services" : "Our Services"}
             sub={lang === 'fr' ? "Expertise Certifiée" : "Certified Expertise"}
           />
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {SERVICES_HIGHLIGHTS.map((service) => (
               <div
                 key={service.id}
@@ -1895,7 +1895,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
 
       {/* BEFORE / AFTER SHOWCASE */}
       <section className="py-24 bg-neutral-900 overflow-hidden" id="results">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-16 items-center">
             <div className="lg:w-1/2">
               <SectionHeading
@@ -1937,7 +1937,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
 
       {/* CLUB VIP */}
       <section className="py-24 bg-neutral-950 border-t border-neutral-900" id="vip">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-3xl p-8 md:p-12 border border-neutral-800 relative overflow-hidden">
             {/* Decor */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
@@ -1958,7 +1958,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
                 </Button>
               </div>
 
-              <div className="md:w-1/2 grid grid-cols-2 gap-4 w-full">
+              <div className="md:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                 {[
                   { title: '1 Lavage/mois', mobileTitle: ['1 Lavage', 'par mois'], sub: 'Inclus' },
                   { title: '10% Rabais', sub: 'Services' },
@@ -1993,9 +1993,9 @@ const HomePage = ({ lang, openBooking, setPage }) => {
 
       {/* REVIEWS */}
       <section className="py-24 bg-neutral-950" id="reviews">
-        <div className="container mx-auto px-6 text-center">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <SectionHeading title="Avis Clients" sub="Google 5.0 ★★★★★" />
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {REVIEWS.map((rev, i) => (
               <div key={i} className="bg-neutral-900 p-8 rounded-2xl border border-neutral-800 text-left relative hover:-translate-y-1 transition-transform duration-300">
                 <div className="text-amber-400 flex gap-1 mb-4">
@@ -2019,7 +2019,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
 
       {/* INSTAGRAM FEED */}
       <section className="py-24 bg-neutral-950 border-t border-neutral-900 relative overflow-hidden">
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <SectionHeading
             title={lang === 'fr' ? "Suivez-Nous" : "Follow Us"}
             sub="@GBT_AESTHETICS"
@@ -2071,7 +2071,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
 const WrapPage = ({ lang, openBooking }) => {
   return (
     <div className="w-full pt-20 bg-neutral-950 min-h-screen animate-in fade-in duration-500">
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row gap-12 items-center">
           <div className="md:w-1/2">
             <div className="text-center">
@@ -2225,7 +2225,7 @@ const App = () => {
   }, [page]);
 
   return (
-    <div className={`min-h-screen ${THEME.colors.bgMain} ${THEME.colors.textMain} font-sans selection:bg-amber-400 selection:text-black`}>
+    <div className={`min-h-screen ${THEME.colors.bgMain} ${THEME.colors.textMain} font-sans selection:bg-amber-400 selection:text-black overflow-x-hidden`}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
@@ -2278,7 +2278,7 @@ const App = () => {
 
       {/* Footer */}
       <footer className="bg-neutral-950 border-t border-neutral-900 pt-16 pb-24 md:pb-16 text-neutral-400 text-sm">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
               <div className="mb-6 flex items-center">
