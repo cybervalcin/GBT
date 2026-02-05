@@ -580,6 +580,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
   const [pendingOptionalScroll, setPendingOptionalScroll] = useState(false);
   const [makeSuggestionsOpen, setMakeSuggestionsOpen] = useState(false);
   const [modelSuggestionsOpen, setModelSuggestionsOpen] = useState(false);
+  const [showAllPopularChips, setShowAllPopularChips] = useState(false);
   const detailsRef = useRef(null);
   const makeInputRef = useRef(null);
   const optionalButtonRef = useRef(null);
@@ -715,6 +716,8 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       notesLabel: 'Notes (optionnel)',
       notesHelp: "Ex : peinture noire, micro-rayures, jantes, intérieur très sale",
       popularChipsTitle: 'Suggestions populaires',
+      popularChipsMore: 'Voir plus',
+      popularChipsLess: 'Voir moins',
       fullName: 'Nom complet',
       email: 'Email',
       phone: 'Téléphone',
@@ -778,6 +781,8 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       notesLabel: 'Notes (optional)',
       notesHelp: 'E.g., black paint, micro-scratches, wheels, very dirty interior',
       popularChipsTitle: 'Popular suggestions',
+      popularChipsMore: 'Show more',
+      popularChipsLess: 'Show less',
       fullName: 'Full name',
       email: 'Email',
       phone: 'Phone',
@@ -884,14 +889,40 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
   const popularChipItems = popularChipGroups
     .flatMap((entry) => entry.models.map((model) => ({ make: entry.make, model })))
     .slice(0, 6);
+  const showPopularChipsToggle = popularChipItems.length > 3;
+  const normalizeMakeKey = (value) => value
+    .toString()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]/g, '');
+  const makeLookup = MAKE_OPTIONS_CA.reduce((acc, make) => {
+    acc[normalizeMakeKey(make)] = make;
+    return acc;
+  }, {});
+  const makeAliasLookup = {
+    mercedes: 'Mercedes-Benz',
+    mercedesbenz: 'Mercedes-Benz',
+    benz: 'Mercedes-Benz',
+    landrover: 'Land Rover',
+    rangerover: 'Land Rover',
+    vw: 'Volkswagen',
+    chevy: 'Chevrolet',
+    harley: 'Harley-Davidson',
+    harleydavidson: 'Harley-Davidson',
+    bmwmotorrad: 'BMW Motorrad',
+    bmwmoto: 'BMW Motorrad',
+    canam: 'Can-Am'
+  };
+  const resolveMakeFromInput = (input) => {
+    const key = normalizeMakeKey(input || '');
+    return makeLookup[key] || makeAliasLookup[key] || '';
+  };
   const makeInputValue = formData.vehicle.make.trim();
-  const normalizedMake = MAKE_OPTIONS_CA.find(
-    (make) => make.toLowerCase() === makeInputValue.toLowerCase()
-  ) || '';
+  const makeKey = normalizeMakeKey(makeInputValue);
+  const normalizedMake = resolveMakeFromInput(makeInputValue);
   const makeSuggestions = MAKE_OPTIONS_CA
-    .filter((make) =>
-      make.toLowerCase().includes(makeInputValue.toLowerCase())
-    )
+    .filter((make) => (makeKey ? normalizeMakeKey(make).includes(makeKey) : true))
     .slice(0, 6);
   const modelOptions = normalizedMake ? (MODELS_BY_MAKE_CA[normalizedMake] || []) : [];
   const modelInputValue = formData.vehicle.model.trim();
@@ -973,6 +1004,10 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       setDetailsAnimatedIn(false);
     }
   }, [showDetails]);
+
+  useEffect(() => {
+    setShowAllPopularChips(false);
+  }, [normalizedVehicleTypeKey]);
 
   if (!isOpen) return null;
 
@@ -1238,12 +1273,21 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
                                   key={`${chip.make}-${chip.model}`}
                                   type="button"
                                   onClick={() => handlePopularChipSelect(chip.make, chip.model)}
-                                  className={`px-3 py-1.5 rounded-full border border-neutral-700 bg-neutral-900/60 text-xs font-semibold text-neutral-200 hover:border-amber-400/60 hover:text-amber-200 transition-colors ${index >= 3 ? 'hidden sm:inline-flex' : 'inline-flex'}`}
+                                  className={`px-3 py-1.5 rounded-full border border-neutral-700 bg-neutral-900/60 text-xs font-semibold text-neutral-200 hover:border-amber-400/60 hover:text-amber-200 transition-colors ${index >= 3 && !showAllPopularChips ? 'hidden sm:inline-flex' : 'inline-flex'}`}
                                 >
                                   {chip.make} {chip.model}
                                 </button>
                               ))}
                             </div>
+                            {showPopularChipsToggle && (
+                              <button
+                                type="button"
+                                onClick={() => setShowAllPopularChips((prev) => !prev)}
+                                className="sm:hidden text-xs font-semibold text-neutral-400 hover:text-neutral-200 transition-colors"
+                              >
+                                {showAllPopularChips ? bt.popularChipsLess : bt.popularChipsMore}
+                              </button>
+                            )}
                           </div>
                         )}
 
@@ -1258,12 +1302,20 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
                                 value={formData.vehicle.make}
                                 onChange={(e) => updateVehicleField('make', e.target.value)}
                                 onFocus={() => setMakeSuggestionsOpen(true)}
-                                onBlur={() => setTimeout(() => setMakeSuggestionsOpen(false), 120)}
+                                onBlur={() => {
+                                  const resolved = resolveMakeFromInput(formData.vehicle.make);
+                                  if (resolved && resolved !== formData.vehicle.make) {
+                                    applyMakeSelection(resolved);
+                                  }
+                                  setTimeout(() => setMakeSuggestionsOpen(false), 120);
+                                }}
+                                autoCapitalize="words"
+                                autoCorrect="off"
                                 className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
                                 aria-invalid={Boolean(errors.make)}
                               />
                               {makeSuggestionsOpen && makeSuggestions.length > 0 && (
-                                <div className="absolute z-20 mt-2 w-full max-h-48 overflow-auto rounded-xl border border-neutral-700/80 bg-neutral-900/95 shadow-2xl backdrop-blur-sm ring-1 ring-black/40 divide-y divide-neutral-800/70">
+                                <div className="absolute z-20 mt-2 w-full max-h-48 overflow-auto rounded-xl border border-neutral-700/80 bg-neutral-900/95 shadow-2xl backdrop-blur-sm ring-1 ring-black/40 divide-y divide-neutral-800/70 mb-2">
                                   {makeSuggestions.map((make) => (
                                     <button
                                       key={make}
@@ -1295,11 +1347,13 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
                                 onChange={(e) => updateVehicleField('model', e.target.value)}
                                 onFocus={() => setModelSuggestionsOpen(true)}
                                 onBlur={() => setTimeout(() => setModelSuggestionsOpen(false), 120)}
+                                autoCapitalize="words"
+                                autoCorrect="off"
                                 className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
                                 aria-invalid={Boolean(errors.model)}
                               />
                               {modelSuggestionsOpen && modelSuggestions.length > 0 && (
-                                <div className="absolute z-20 mt-2 w-full max-h-48 overflow-auto rounded-xl border border-neutral-700/80 bg-neutral-900/95 shadow-2xl backdrop-blur-sm ring-1 ring-black/40 divide-y divide-neutral-800/70">
+                                <div className="absolute z-20 mt-2 w-full max-h-48 overflow-auto rounded-xl border border-neutral-700/80 bg-neutral-900/95 shadow-2xl backdrop-blur-sm ring-1 ring-black/40 divide-y divide-neutral-800/70 mb-2">
                                   {modelSuggestions.map((model) => (
                                     <button
                                       key={model}
