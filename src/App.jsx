@@ -410,8 +410,10 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
     { label: 'Avis', id: 'reviews' }
   ];
 
+  const navIsSolid = scrolled || mobileMenu;
+
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 py-4' : 'bg-transparent py-8'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${navIsSolid ? 'bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 py-4' : 'bg-transparent py-8'}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         {/* Logo */}
         <div 
@@ -465,34 +467,36 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
 
       {/* Mobile Menu */}
       {mobileMenu && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-neutral-900 border-b border-neutral-800 p-7 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-2">
-          <div className="flex items-center justify-between rounded-lg border border-neutral-800 bg-neutral-950/60 px-4 py-3">
-            <span className="text-xs uppercase tracking-widest text-neutral-400">
-              {lang === 'fr' ? 'Langue' : 'Language'}
-            </span>
-            <button
-              onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-              className="text-neutral-200 font-bold text-sm uppercase tracking-wider hover:text-amber-400 transition-colors"
-            >
-              {lang === 'fr' ? 'EN' : 'FR'}
+        <div className="md:hidden fixed inset-0 z-40 bg-neutral-950/95 backdrop-blur-sm">
+          <div className="h-full overflow-y-auto pt-24 px-6 pb-10 flex flex-col gap-4">
+            <div className="flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-950/60 px-4 py-3">
+              <span className="text-xs uppercase tracking-widest text-neutral-400">
+                {lang === 'fr' ? 'Langue' : 'Language'}
+              </span>
+              <button
+                onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+                className="text-neutral-200 font-bold text-sm uppercase tracking-wider hover:text-amber-400 transition-colors"
+              >
+                {lang === 'fr' ? 'EN' : 'FR'}
+              </button>
+            </div>
+            {navItems.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => handleNavClick(item.id)}
+                className="text-xl font-bold text-white text-left py-3 active:text-amber-400"
+              >
+                {item.label}
+              </button>
+            ))}
+            <button onClick={() => { setPage('wrap'); setMobileMenu(false); }} className="text-xl font-bold text-white text-left py-3 active:text-blue-400 flex items-center gap-3">
+              <Shield size={20} className="text-blue-400" /> Wrap
             </button>
+            <hr className="border-neutral-800 my-2" />
+            <Button onClick={() => { openBooking(); setMobileMenu(false); }} className="w-full text-base py-3.5">
+              {lang === 'fr' ? 'Réserver' : 'Book Now'}
+            </Button>
           </div>
-          {navItems.map((item) => (
-            <button
-              key={item.label}
-              onClick={() => handleNavClick(item.id)}
-              className="text-xl font-bold text-white text-left py-3 active:text-amber-400"
-            >
-              {item.label}
-            </button>
-          ))}
-          <button onClick={() => { setPage('wrap'); setMobileMenu(false); }} className="text-xl font-bold text-white text-left py-3 active:text-blue-400 flex items-center gap-3">
-            <Shield size={20} className="text-blue-400" /> Wrap
-          </button>
-          <hr className="border-neutral-800 my-2" />
-          <Button onClick={() => { openBooking(); setMobileMenu(false); }} className="w-full text-base py-3.5">
-            {lang === 'fr' ? 'Réserver' : 'Book Now'}
-          </Button>
         </div>
       )}
     </nav>
