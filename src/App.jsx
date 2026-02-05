@@ -1500,6 +1500,16 @@ const HomePage = ({ lang, openBooking, setPage }) => {
       <section className="py-12 bg-neutral-950 border-b border-neutral-900">
         <div className="container mx-auto px-6">
           <div className="relative">
+            <div className="text-center mb-6 md:mb-8">
+              <div className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2">
+                {lang === 'fr' ? 'Produits et équipements reconnus.' : 'Recognized products & equipment.'}
+              </div>
+              <p className="text-neutral-400 text-sm md:text-base max-w-2xl mx-auto">
+                {lang === 'fr'
+                  ? 'Nous utilisons des produits et équipements reconnus : céramique, polissage, films et protection.'
+                  : 'We use recognized products and equipment: ceramic, polishing, films, and protection.'}
+              </p>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {BRAND_BADGES.map((brand) => (
                 <button
@@ -1521,11 +1531,6 @@ const HomePage = ({ lang, openBooking, setPage }) => {
                 </button>
               ))}
             </div>
-            <p className="text-neutral-500 text-sm text-center mt-4">
-              {lang === 'fr'
-                ? 'Nous utilisons des produits et équipements reconnus : céramique, polissage, films et protection.'
-                : 'We use recognized products and equipment: ceramic, polishing, films, and protection.'}
-            </p>
           </div>
         </div>
 
