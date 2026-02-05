@@ -649,6 +649,10 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       validation: {
         typeRequired: 'Veuillez choisir un type de véhicule.',
         serviceRequired: 'Veuillez sélectionner un service.',
+        nameRequired: 'Veuillez entrer votre nom.',
+        emailRequired: 'Veuillez entrer votre email.',
+        emailInvalid: 'Email invalide.',
+        phoneRequired: 'Veuillez entrer votre téléphone.',
         makeRequired: 'Veuillez ajouter la marque.',
         modelRequired: 'Veuillez ajouter le modèle.',
         makeNeeded: 'Veuillez ajouter la marque.',
@@ -704,6 +708,10 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       validation: {
         typeRequired: 'Please select a vehicle type.',
         serviceRequired: 'Please select a service.',
+        nameRequired: 'Please enter your name.',
+        emailRequired: 'Please enter your email.',
+        emailInvalid: 'Invalid email.',
+        phoneRequired: 'Please enter your phone.',
         makeRequired: 'Please add the make.',
         modelRequired: 'Please add the model.',
         makeNeeded: 'Please add the make.',
@@ -954,6 +962,28 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
     };
   };
 
+  const validateContact = () => {
+    const nextErrors = {};
+    const name = formData.contact.name.trim();
+    const email = formData.contact.email.trim();
+    const phone = formData.contact.phone.trim();
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const phoneDigits = phone.replace(/[^\d]/g, '');
+
+    if (!name) nextErrors.name = bt.validation.nameRequired;
+    if (!email) nextErrors.email = bt.validation.emailRequired;
+    if (email && !emailValid) nextErrors.email = bt.validation.emailInvalid;
+    if (!phone) nextErrors.phone = bt.validation.phoneRequired;
+
+    // Soft validation: if provided but too short, treat as required error
+    if (phone && phoneDigits.length < 10) nextErrors.phone = bt.validation.phoneRequired;
+
+    return {
+      valid: Object.keys(nextErrors).length === 0,
+      errors: nextErrors
+    };
+  };
+
   const nextStep = () => {
     if (currentStep === 'services') {
       if (formData.service.length === 0) {
@@ -987,6 +1017,11 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
   };
 
   const handleConfirm = () => {
+    const { valid, errors: nextErrors } = validateContact();
+    if (!valid) {
+      setErrors(nextErrors);
+      return;
+    }
     setIsSubmitting(true);
     const payload = buildBookingPayload();
     console.log('Booking Payload:', payload);
@@ -1232,20 +1267,35 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
                     <input
                       placeholder={bt.fullName}
                       className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
-                      onChange={(e) => setFormData({ ...formData, contact: { ...formData.contact, name: e.target.value } })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, contact: { ...formData.contact, name: e.target.value } });
+                        setErrors((prev) => ({ ...prev, name: undefined }));
+                      }}
+                      aria-invalid={Boolean(errors.name)}
                     />
+                    {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name}</p>}
                     <input
                       placeholder={bt.email}
                       type="email"
                       className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
-                      onChange={(e) => setFormData({ ...formData, contact: { ...formData.contact, email: e.target.value } })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, contact: { ...formData.contact, email: e.target.value } });
+                        setErrors((prev) => ({ ...prev, email: undefined }));
+                      }}
+                      aria-invalid={Boolean(errors.email)}
                     />
+                    {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
                     <input
                       placeholder={bt.phone}
                       type="tel"
                       className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
-                      onChange={(e) => setFormData({ ...formData, contact: { ...formData.contact, phone: e.target.value } })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, contact: { ...formData.contact, phone: e.target.value } });
+                        setErrors((prev) => ({ ...prev, phone: undefined }));
+                      }}
+                      aria-invalid={Boolean(errors.phone)}
                     />
+                    {errors.phone && <p className="text-xs text-red-400 mt-1">{errors.phone}</p>}
                     <div className="p-4 bg-neutral-800 rounded-lg">
                       <div className="text-neutral-400 text-xs uppercase tracking-wider mb-2">
                         {bt.availability}
