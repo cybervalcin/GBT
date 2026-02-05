@@ -1455,7 +1455,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
             </p>
 
             {/* Popular Services + CTA */}
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl max-w-xl mx-auto shadow-2xl animate-in fade-in zoom-in duration-500 delay-300">
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl max-w-xl mx-auto shadow-2xl animate-in fade-in zoom-in duration-500 delay-300 mb-16 sm:mb-0">
               <div className="text-xs uppercase tracking-widest text-neutral-400 mb-3">
                 {lang === 'fr' ? 'Services populaires' : 'Popular services'}
               </div>
@@ -1485,7 +1485,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
           type="button"
           aria-label={lang === 'fr' ? 'Aller aux services' : 'Go to services'}
           onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-          className="group absolute bottom-10 left-1/2 -translate-x-1/2 text-neutral-500 hover:text-amber-400 transition-colors cursor-pointer"
+          className="group absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 text-neutral-500 hover:text-amber-400 transition-colors cursor-pointer hidden sm:flex flex-col items-center"
         >
           <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-8 rounded-full border border-neutral-700 bg-neutral-950/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-neutral-300 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
             {lang === 'fr' ? 'Défiler' : 'Scroll'}
