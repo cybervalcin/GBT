@@ -648,9 +648,12 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       summaryTitle: 'Résumé',
       summaryVehicle: 'Véhicule',
       summaryType: 'Type',
+      summaryServices: 'Services',
       summaryMakeModel: 'Marque/Modèle',
       summaryYear: 'Année',
       summaryNotProvided: 'Non précisé',
+      servicesSingular: 'service',
+      servicesPlural: 'services',
       validation: {
         typeRequired: 'Veuillez choisir un type de véhicule.',
         serviceRequired: 'Veuillez sélectionner un service.',
@@ -707,9 +710,12 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       summaryTitle: 'Summary',
       summaryVehicle: 'Vehicle',
       summaryType: 'Type',
+      summaryServices: 'Services',
       summaryMakeModel: 'Make/Model',
       summaryYear: 'Year',
       summaryNotProvided: 'Not provided',
+      servicesSingular: 'service',
+      servicesPlural: 'services',
       validation: {
         typeRequired: 'Please select a vehicle type.',
         serviceRequired: 'Please select a service.',
@@ -792,6 +798,10 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
     ? `${formData.vehicle.make.trim()} ${formData.vehicle.model.trim()}`
     : bt.summaryNotProvided;
   const summaryYear = formData.vehicle.year.trim() || bt.summaryNotProvided;
+  const serviceCount = formData.service.length;
+  const summaryServicesCount = serviceCount === 0
+    ? bt.summaryNotProvided
+    : `${serviceCount} ${serviceCount > 1 ? bt.servicesPlural : bt.servicesSingular}`;
 
   useEffect(() => {
     if (requiresDetails || hasAnyDetails) {
@@ -1328,6 +1338,10 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
                         <div className="flex items-center justify-between">
                           <span className="text-neutral-500">{bt.summaryType}</span>
                           <span className="text-white font-semibold">{selectedTypeLabel}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-neutral-500">{bt.summaryServices}</span>
+                          <span className="text-white font-semibold">{summaryServicesCount}</span>
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-neutral-500">{bt.summaryMakeModel}</span>
