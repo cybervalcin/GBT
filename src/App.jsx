@@ -264,11 +264,10 @@ const SERVICES_HIGHLIGHTS = [
   }
 ];
 
-const POPULAR_MODELS = [
-  { label: 'Audi Q5', make: 'Audi', model: 'Q5', type: 'suv' },
-  { label: 'BMW M3', make: 'BMW', model: 'M3', type: 'sedan' },
-  { label: 'Tesla Model 3', make: 'Tesla', model: 'Model 3', type: 'electric' },
-  { label: 'Range Rover Sport', make: 'Range Rover', model: 'Sport', type: 'suv' }
+const POPULAR_SERVICES = [
+  { label: { fr: 'Nettoyage complet', en: 'Full cleaning' }, action: 'booking', serviceId: 'detailing_full' },
+  { label: { fr: 'Nanocéramique 3 ans', en: '3-year nano ceramic' }, action: 'booking', serviceId: 'nano_3yr' },
+  { label: { fr: 'Wrap', en: 'Wrap' }, action: 'wrap' }
 ];
 
 const BRAND_BADGES = [
@@ -558,7 +557,7 @@ const BeforeAfterSlider = () => {
   );
 };
 
-const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
+const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initialStep = 1 }) => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -726,7 +725,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
   // Reset state when opening
   useEffect(() => {
     if (isOpen) {
-      setStep(1);
+      setStep(initialStep);
       setSubmitted(false);
       setIsSubmitting(false);
       setShowDetails(false);
@@ -743,12 +742,12 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
           notes: prefill?.notes || ''
         },
         condition: '',
-        service: [],
+        service: prefillServiceId ? [prefillServiceId] : [],
         date: { time: '' },
         contact: { name: '', email: '', phone: '' }
       });
     }
-  }, [isOpen, prefill]);
+  }, [isOpen, prefill, prefillServiceId, initialStep]);
 
   const wrapServiceIds = new Set(['tint_front', 'tint_rear', 'chrome_delete', 'full_wrap']);
   const isWrapSelected = formData.service.some((id) => wrapServiceIds.has(id));
@@ -808,6 +807,15 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
       setPendingScroll(false);
     }
   }, [pendingScroll, step]);
+
+  useEffect(() => {
+    if (!isOpen || step !== 3 || !prefillServiceId) return;
+    requestAnimationFrame(() => {
+      document
+        .querySelector(`[data-service-id="${prefillServiceId}"]`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }, [isOpen, step, prefillServiceId]);
 
   useEffect(() => {
     if (!formData.vehicle.type || requiresDetails || showDetails || step !== 1) return;
@@ -947,6 +955,11 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
         return;
       }
       setErrors({});
+    }
+    if (step === 3 && !formData.vehicle.type) {
+      setErrors({ type: bt.validation.typeRequired });
+      setStep(1);
+      return;
     }
     setStep(step + 1);
   };
@@ -1164,6 +1177,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
                             <button
                               key={item.id}
                               onClick={() => toggleService(item.id)}
+                              data-service-id={item.id}
                               className={`w-full text-left p-3 rounded-lg border flex justify-between items-center transition-all ${formData.service.includes(item.id) ? 'border-amber-400 bg-amber-400/10' : 'border-neutral-800 hover:bg-neutral-800'}`}
                             >
                               <div>
@@ -1282,9 +1296,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill }) => {
 
 // --- PAGES ---
 
-const HomePage = ({ lang, openBooking, setBookingPrefill, setPage }) => {
-  const [vehicleQuery, setVehicleQuery] = useState('');
-  const [recommendation, setRecommendation] = useState(null);
+const HomePage = ({ lang, openBooking, setPage }) => {
   const [activeBadge, setActiveBadge] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -1296,20 +1308,16 @@ const HomePage = ({ lang, openBooking, setBookingPrefill, setPage }) => {
     return () => mediaQuery.removeEventListener('change', update);
   }, []);
 
-  const handleVehicleSearch = (e) => {
-    e.preventDefault();
-    setRecommendation(true);
-    openBooking();
-  };
+  const handlePopularService = (item) => {
+    if (item.action === 'wrap') {
+      setPage('wrap');
+      setTimeout(() => {
+        document.getElementById('wrap-prices')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+      return;
+    }
 
-  const handleModelSelect = (model) => {
-    setVehicleQuery(model.label);
-    setRecommendation(true);
-    setBookingPrefill({
-      type: model.type,
-      make: model.make,
-      model: model.model
-    });
+    openBooking({ serviceId: item.serviceId, step: 3 });
   };
 
   const activeBrand = BRAND_BADGES.find((brand) => brand.id === activeBadge);
@@ -1373,41 +1381,29 @@ const HomePage = ({ lang, openBooking, setBookingPrefill, setPage }) => {
                 : "Restore your vehicle to showroom shine. Ceramic coating, full detailing, and precision restoration in Mascouche."}
             </p>
 
-            {/* Popular Models + CTA */}
+            {/* Popular Services + CTA */}
             <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl max-w-xl mx-auto shadow-2xl animate-in fade-in zoom-in duration-500 delay-300">
               <div className="text-xs uppercase tracking-widest text-neutral-400 mb-3">
-                {lang === 'fr' ? 'Modèles populaires' : 'Popular models'}
+                {lang === 'fr' ? 'Services populaires' : 'Popular services'}
               </div>
               <div className="flex flex-wrap gap-2 mb-4 justify-center">
-                {POPULAR_MODELS.map((model) => (
+                {POPULAR_SERVICES.map((item) => (
                   <button
-                    key={model.label}
+                    key={item.label.fr}
                     type="button"
-                    onClick={() => handleModelSelect(model)}
+                    onClick={() => handlePopularService(item)}
                     className="px-3 py-2 rounded-full text-xs sm:text-sm font-semibold bg-neutral-900/80 border border-neutral-800 text-neutral-200 hover:border-amber-400/60 hover:text-amber-300 transition-colors"
                   >
-                    {model.label}
+                    {item.label[lang]}
                   </button>
                 ))}
               </div>
-              <form onSubmit={handleVehicleSearch} className="flex justify-center">
-                <Button className="h-12 rounded-xl px-8" icon={ArrowRight}>
+              <div className="flex justify-center">
+                <Button className="h-12 rounded-xl px-8" icon={ArrowRight} onClick={() => openBooking({ step: 3 })}>
                   {lang === 'fr' ? 'Voir Nos Forfaits' : 'See Packages'}
                 </Button>
-              </form>
-            </div>
-
-            {/* Recommendation Result */}
-            {recommendation && (
-              <div className="mt-4 animate-in fade-in slide-in-from-top-2">
-                <span
-                  className="text-amber-400 font-bold text-sm bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20 cursor-pointer hover:bg-amber-400/20 transition-colors"
-                  onClick={openBooking}
-                >
-                  {lang === 'fr' ? `✨ Offre recommandée pour ${vehicleQuery || 'votre véhicule'} (Cliquez ici)` : `✨ Recommended offer for ${vehicleQuery || 'your vehicle'} (Click here)`}
-                </span>
               </div>
-            )}
+            </div>
           </div>
         </div>
 
@@ -1795,7 +1791,7 @@ const WrapPage = ({ lang, openBooking }) => {
             </div>
 
             {/* Tableau de prix Wrap mis à jour */}
-            <div className="grid md:grid-cols-2 gap-4 text-left">
+            <div className="grid md:grid-cols-2 gap-4 text-left" id="wrap-prices">
               <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl relative overflow-hidden">
                 <div
                   className="pointer-events-none absolute top-0 right-0 h-24 w-24 -translate-y-1/2 translate-x-1/2 rounded-full blur-2xl"
@@ -1890,9 +1886,21 @@ const App = () => {
   const [page, setPage] = useState('home'); // 'home' or 'wrap'
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingPrefill, setBookingPrefill] = useState(null);
+  const [bookingServicePrefill, setBookingServicePrefill] = useState(null);
+  const [bookingStepPrefill, setBookingStepPrefill] = useState(1);
 
-  const openBooking = (prefill = bookingPrefill) => {
-    setBookingPrefill(prefill || null);
+  const openBooking = (options = {}) => {
+    const isEvent = options && typeof options.preventDefault === 'function';
+    const normalized =
+      !isEvent && options && (options.vehicle || options.serviceId || options.step)
+        ? options
+        : !isEvent
+          ? { vehicle: options }
+          : {};
+
+    setBookingPrefill(normalized.vehicle || null);
+    setBookingServicePrefill(normalized.serviceId || null);
+    setBookingStepPrefill(normalized.step || 1);
     setIsBookingOpen(true);
   };
 
@@ -1924,7 +1932,7 @@ const App = () => {
       <Navbar
         lang={lang}
         setLang={setLang}
-        openBooking={() => openBooking(null)}
+        openBooking={openBooking}
         page={page}
         setPage={setPage}
       />
@@ -1934,11 +1942,10 @@ const App = () => {
           <HomePage
             lang={lang}
             openBooking={openBooking}
-            setBookingPrefill={setBookingPrefill}
             setPage={setPage}
           />
         )}
-        {page === 'wrap' && <WrapPage lang={lang} openBooking={() => openBooking(null)} />}
+        {page === 'wrap' && <WrapPage lang={lang} openBooking={openBooking} />}
       </main>
 
       {/* Sticky Mobile Bar */}
@@ -1947,7 +1954,7 @@ const App = () => {
           <Phone size={18} /> {lang === 'fr' ? 'Appeler' : 'Call'}
         </a>
         <button
-          onClick={() => openBooking(null)}
+          onClick={() => openBooking()}
           className="flex-1 bg-amber-400 text-black py-3 rounded font-bold uppercase tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-400/20 active:bg-amber-500"
         >
           <Calendar size={18} /> {lang === 'fr' ? 'Réserver' : 'Book'}
@@ -2028,6 +2035,8 @@ const App = () => {
         onClose={() => setIsBookingOpen(false)}
         lang={lang}
         prefill={bookingPrefill}
+        prefillServiceId={bookingServicePrefill}
+        initialStep={bookingStepPrefill}
       />
     </div>
   );
