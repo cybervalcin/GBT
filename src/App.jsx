@@ -467,8 +467,8 @@ const Navbar = ({ lang, setLang, openBooking, page, setPage }) => {
 
       {/* Mobile Menu */}
       {mobileMenu && (
-        <div className="md:hidden fixed inset-0 z-40 bg-neutral-950/95 backdrop-blur-sm">
-          <div className="h-full overflow-y-auto pt-24 px-6 pb-10 flex flex-col gap-4">
+        <div className="md:hidden fixed inset-0 z-50 bg-neutral-950">
+          <div className="h-full overflow-y-auto pt-20 px-6 pb-10 flex flex-col gap-4">
             <div className="flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-950/60 px-4 py-3">
               <span className="text-xs uppercase tracking-widest text-neutral-400">
                 {lang === 'fr' ? 'Langue' : 'Language'}
@@ -2358,10 +2358,6 @@ const App = () => {
               >
                 {lang === 'fr' ? 'EN' : 'FR'}
               </button>
-              <div className="flex gap-2 items-center">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                {lang === 'fr' ? 'Système Opérationnel' : 'System Operational'}
-              </div>
             </div>
           </div>
         </div>
