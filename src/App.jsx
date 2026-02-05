@@ -557,8 +557,8 @@ const BeforeAfterSlider = () => {
   );
 };
 
-const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initialStep = 1 }) => {
-  const [step, setStep] = useState(1);
+const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry = 'browse_services' }) => {
+  const [stepIndex, setStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -582,6 +582,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
   const toggleService = (serviceId) => {
     // For now, single select logic for simplicity in this flow, but adaptable
     setFormData((prev) => ({ ...prev, service: [serviceId] }));
+    setErrors((prev) => ({ ...prev, service: undefined }));
   };
 
   const updateVehicleType = (typeId) => {
@@ -647,6 +648,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
       summaryNotProvided: 'Non précisé',
       validation: {
         typeRequired: 'Veuillez choisir un type de véhicule.',
+        serviceRequired: 'Veuillez sélectionner un service.',
         makeRequired: 'Veuillez ajouter la marque.',
         modelRequired: 'Veuillez ajouter le modèle.',
         makeNeeded: 'Veuillez ajouter la marque.',
@@ -701,6 +703,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
       summaryNotProvided: 'Not provided',
       validation: {
         typeRequired: 'Please select a vehicle type.',
+        serviceRequired: 'Please select a service.',
         makeRequired: 'Please add the make.',
         modelRequired: 'Please add the model.',
         makeNeeded: 'Please add the make.',
@@ -722,10 +725,20 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
     { id: 'motorcycle', label: bt.vehicleTypes.motorcycle, icon: Bike }
   ];
 
+  const effectiveEntry = entry === 'popular_service' && !prefillServiceId ? 'browse_services' : entry;
+  const stepsByEntry = {
+    popular_service: ['vehicle', 'condition', 'contact'],
+    browse_services: ['services', 'vehicle', 'condition', 'contact'],
+    default: ['vehicle', 'condition', 'services', 'contact']
+  };
+  const steps = stepsByEntry[effectiveEntry] || stepsByEntry.default;
+  const currentStep = steps[stepIndex] || steps[0];
+  const isLastStep = stepIndex === steps.length - 1;
+
   // Reset state when opening
   useEffect(() => {
     if (isOpen) {
-      setStep(initialStep);
+      setStepIndex(0);
       setSubmitted(false);
       setIsSubmitting(false);
       setShowDetails(false);
@@ -747,7 +760,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
         contact: { name: '', email: '', phone: '' }
       });
     }
-  }, [isOpen, prefill, prefillServiceId, initialStep]);
+  }, [isOpen, prefill, prefillServiceId]);
 
   const wrapServiceIds = new Set(['tint_front', 'tint_rear', 'chrome_delete', 'full_wrap']);
   const isWrapSelected = formData.service.some((id) => wrapServiceIds.has(id));
@@ -793,37 +806,40 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
     const nowRequired = requiresDetails;
     if (!wasRequired && nowRequired) {
       setShowDetails(true);
-      setPendingScroll(true);
-      if (step !== 1) {
-        setStep(1);
+      const vehicleIndex = steps.indexOf('vehicle');
+      if (currentStep !== 'vehicle' && vehicleIndex >= 0) {
+        setStepIndex(vehicleIndex);
+        setPendingScroll(true);
+      } else {
+        setPendingScroll(true);
       }
     }
     prevRequiredRef.current = nowRequired;
-  }, [requiresDetails, step]);
+  }, [requiresDetails, currentStep, steps]);
 
   useEffect(() => {
-    if (pendingScroll && step === 1) {
+    if (pendingScroll && currentStep === 'vehicle') {
       scrollToVehicleDetails();
       setPendingScroll(false);
     }
-  }, [pendingScroll, step]);
+  }, [pendingScroll, currentStep]);
 
   useEffect(() => {
-    if (!isOpen || step !== 3 || !prefillServiceId) return;
+    if (!isOpen || currentStep !== 'services' || !prefillServiceId) return;
     requestAnimationFrame(() => {
       document
         .querySelector(`[data-service-id="${prefillServiceId}"]`)
         ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
-  }, [isOpen, step, prefillServiceId]);
+  }, [isOpen, currentStep, prefillServiceId]);
 
   useEffect(() => {
-    if (!formData.vehicle.type || requiresDetails || showDetails || step !== 1) return;
+    if (!formData.vehicle.type || requiresDetails || showDetails || currentStep !== 'vehicle') return;
     if (typeof window !== 'undefined' && window.matchMedia) {
       if (!window.matchMedia('(max-width: 767px)').matches) return;
     }
     setPendingOptionalScroll(true);
-  }, [formData.vehicle.type, requiresDetails, showDetails, step]);
+  }, [formData.vehicle.type, requiresDetails, showDetails, currentStep]);
 
   useEffect(() => {
     if (!pendingOptionalScroll) return;
@@ -939,7 +955,14 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
   };
 
   const nextStep = () => {
-    if (step === 1) {
+    if (currentStep === 'services') {
+      if (formData.service.length === 0) {
+        setErrors({ service: bt.validation.serviceRequired });
+        return;
+      }
+    }
+
+    if (currentStep === 'vehicle') {
       const { valid, errors: nextErrors } = validateVehicleDetails();
       if (!valid) {
         setErrors(nextErrors);
@@ -947,24 +970,21 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
       }
       setErrors({});
     }
-    if (step === 3 && requiresDetails) {
-      const { valid, errors: nextErrors } = validateVehicleDetails();
-      if (!valid) {
-        setErrors(nextErrors);
-        setStep(1);
-        return;
-      }
+
+    if (currentStep === 'services' && formData.service.length > 0) {
       setErrors({});
     }
-    if (step === 3 && !formData.vehicle.type) {
-      setErrors({ type: bt.validation.typeRequired });
-      setStep(1);
-      return;
+
+    if (stepIndex < steps.length - 1) {
+      setStepIndex(stepIndex + 1);
     }
-    setStep(step + 1);
   };
 
-  const prevStep = () => setStep(step - 1);
+  const prevStep = () => {
+    if (stepIndex > 0) {
+      setStepIndex(stepIndex - 1);
+    }
+  };
 
   const handleConfirm = () => {
     setIsSubmitting(true);
@@ -997,7 +1017,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
         {/* Progress */}
         {!submitted && (
           <div className="w-full bg-neutral-800 h-1">
-            <div className="bg-amber-400 h-full transition-all duration-300" style={{ width: `${(step / 4) * 100}%` }}></div>
+            <div className="bg-amber-400 h-full transition-all duration-300" style={{ width: `${((stepIndex + 1) / steps.length) * 100}%` }}></div>
           </div>
         )}
 
@@ -1021,7 +1041,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
             </div>
           ) : (
             <>
-              {step === 1 && (
+              {currentStep === 'vehicle' && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                   <h4 className="text-2xl font-bold text-white mb-4">
                     {bt.step1Title}
@@ -1137,7 +1157,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
                 </div>
               )}
 
-              {step === 2 && (
+              {currentStep === 'condition' && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                   <h4 className="text-2xl font-bold text-white mb-4">
                     {bt.step2Title}
@@ -1160,11 +1180,14 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
                 </div>
               )}
 
-              {step === 3 && (
+              {currentStep === 'services' && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                   <h4 className="text-2xl font-bold text-white mb-4">
                     {bt.step3Title}
                   </h4>
+                  {errors.service && (
+                    <p className="text-sm text-red-400">{errors.service}</p>
+                  )}
 
                   <div className="space-y-6">
                     {Object.entries(PRICING_DATA).map(([key, category]) => (
@@ -1200,7 +1223,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
                 </div>
               )}
 
-              {step === 4 && (
+              {currentStep === 'contact' && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                   <h4 className="text-2xl font-bold text-white mb-4">
                     {bt.step4Title}
@@ -1272,13 +1295,13 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, initia
         {/* Footer */}
         {!submitted && (
           <div className="p-6 border-t border-neutral-800 flex justify-between bg-neutral-950">
-            {step > 1 ? (
+            {stepIndex > 0 ? (
               <Button variant="ghost" onClick={prevStep}>
                 {bt.back}
               </Button>
             ) : <div></div>}
 
-            {step < 4 ? (
+            {!isLastStep ? (
               <Button onClick={nextStep} icon={ArrowRight}>
                 {bt.next}
               </Button>
@@ -1317,7 +1340,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
       return;
     }
 
-    openBooking({ serviceId: item.serviceId, step: 3 });
+    openBooking({ entry: 'popular_service', serviceId: item.serviceId });
   };
 
   const activeBrand = BRAND_BADGES.find((brand) => brand.id === activeBadge);
@@ -1399,7 +1422,7 @@ const HomePage = ({ lang, openBooking, setPage }) => {
                 ))}
               </div>
               <div className="flex justify-center">
-                <Button className="h-12 rounded-xl px-8" icon={ArrowRight} onClick={() => openBooking({ step: 3 })}>
+                <Button className="h-12 rounded-xl px-8" icon={ArrowRight} onClick={() => openBooking({ entry: 'browse_services' })}>
                   {lang === 'fr' ? 'Voir Nos Forfaits' : 'See Packages'}
                 </Button>
               </div>
@@ -1887,12 +1910,12 @@ const App = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingPrefill, setBookingPrefill] = useState(null);
   const [bookingServicePrefill, setBookingServicePrefill] = useState(null);
-  const [bookingStepPrefill, setBookingStepPrefill] = useState(1);
+  const [bookingEntry, setBookingEntry] = useState('default');
 
   const openBooking = (options = {}) => {
     const isEvent = options && typeof options.preventDefault === 'function';
     const normalized =
-      !isEvent && options && (options.vehicle || options.serviceId || options.step)
+      !isEvent && options && (options.vehicle || options.serviceId || options.entry)
         ? options
         : !isEvent
           ? { vehicle: options }
@@ -1900,7 +1923,7 @@ const App = () => {
 
     setBookingPrefill(normalized.vehicle || null);
     setBookingServicePrefill(normalized.serviceId || null);
-    setBookingStepPrefill(normalized.step || 1);
+    setBookingEntry(normalized.entry || (normalized.serviceId ? 'popular_service' : 'default'));
     setIsBookingOpen(true);
   };
 
@@ -2036,7 +2059,7 @@ const App = () => {
         lang={lang}
         prefill={bookingPrefill}
         prefillServiceId={bookingServicePrefill}
-        initialStep={bookingStepPrefill}
+        entry={bookingEntry}
       />
     </div>
   );
