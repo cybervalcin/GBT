@@ -14,6 +14,11 @@ import serviceCorrection from './assets/service-correction-peinture.jpg';
 import serviceDetailing from './assets/service-esthetique-complete.jpg';
 import protectionPrestigeLogo from './assets/Protection-Prestige-Transparent-logo-640x160px.png';
 import {
+  MAKE_OPTIONS_CA,
+  MODELS_BY_MAKE_CA,
+  POPULAR_CHIPS_BY_VEHICLE_TYPE
+} from './data/vehicleCatalog.ca';
+import {
   Car,
   CarFront,
   Truck,
@@ -573,6 +578,8 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
   const [pendingScroll, setPendingScroll] = useState(false);
   const [detailsAnimatedIn, setDetailsAnimatedIn] = useState(false);
   const [pendingOptionalScroll, setPendingOptionalScroll] = useState(false);
+  const [makeSuggestionsOpen, setMakeSuggestionsOpen] = useState(false);
+  const [modelSuggestionsOpen, setModelSuggestionsOpen] = useState(false);
   const detailsRef = useRef(null);
   const makeInputRef = useRef(null);
   const optionalButtonRef = useRef(null);
@@ -590,14 +597,79 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
     setErrors((prev) => ({ ...prev, service: undefined }));
   };
 
+  const normalizeVehicleTypeKey = (value) => {
+    if (!value) return '';
+    const trimmed = value.toString().trim();
+    const normalizedMap = {
+      sedan: 'sedan',
+      suv: 'suv',
+      pickup: 'pickup',
+      exotic: 'exotic',
+      electric: 'electric',
+      motorcycle: 'motorcycle',
+      berline: 'sedan',
+      'v.u.s.': 'suv',
+      vus: 'suv',
+      'pick-up': 'pickup',
+      'pick‑up': 'pickup',
+      camion: 'pickup',
+      exotique: 'exotic',
+      electrique: 'electric',
+      électrique: 'electric',
+      moto: 'motorcycle'
+    };
+
+    const direct = normalizedMap[trimmed];
+    if (direct) return direct;
+    const lower = trimmed.toLowerCase();
+    return normalizedMap[lower] || trimmed;
+  };
+
   const updateVehicleType = (typeId) => {
-    setFormData((prev) => ({ ...prev, vehicle: { ...prev.vehicle, type: typeId } }));
+    const normalizedType = normalizeVehicleTypeKey(typeId);
+    setFormData((prev) => ({ ...prev, vehicle: { ...prev.vehicle, type: normalizedType } }));
     setErrors((prev) => ({ ...prev, type: undefined }));
   };
 
   const updateVehicleField = (field, value) => {
     setFormData((prev) => ({ ...prev, vehicle: { ...prev.vehicle, [field]: value } }));
     setErrors((prev) => ({ ...prev, [field]: undefined }));
+  };
+
+  const applyMakeSelection = (make) => {
+    setFormData((prev) => {
+      const models = MODELS_BY_MAKE_CA[make] || [];
+      const hasModelMatch = models.some(
+        (model) => model.toLowerCase() === prev.vehicle.model.trim().toLowerCase()
+      );
+      return {
+        ...prev,
+        vehicle: {
+          ...prev.vehicle,
+          make,
+          model: prev.vehicle.model && !hasModelMatch ? '' : prev.vehicle.model
+        }
+      };
+    });
+    setErrors((prev) => ({ ...prev, make: undefined }));
+  };
+
+  const applyModelSelection = (model) => {
+    updateVehicleField('model', model);
+  };
+
+  const handlePopularChipSelect = (make, model) => {
+    setShowDetails(true);
+    setPendingScroll(true);
+    setFormData((prev) => ({
+      ...prev,
+      vehicle: {
+        ...prev.vehicle,
+        make,
+        model
+      }
+    }));
+    setErrors((prev) => ({ ...prev, make: undefined, model: undefined }));
   };
 
   const conditionOptions = [
@@ -642,6 +714,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       yearHelp: 'Ex : 2021',
       notesLabel: 'Notes (optionnel)',
       notesHelp: "Ex : peinture noire, micro-rayures, jantes, intérieur très sale",
+      popularChipsTitle: 'Suggestions populaires',
       fullName: 'Nom complet',
       email: 'Email',
       phone: 'Téléphone',
@@ -704,6 +777,7 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       yearHelp: 'E.g., 2021',
       notesLabel: 'Notes (optional)',
       notesHelp: 'E.g., black paint, micro-scratches, wheels, very dirty interior',
+      popularChipsTitle: 'Popular suggestions',
       fullName: 'Full name',
       email: 'Email',
       phone: 'Phone',
@@ -764,10 +838,12 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
       setPendingScroll(false);
       setDetailsAnimatedIn(false);
       setPendingOptionalScroll(false);
+      setMakeSuggestionsOpen(false);
+      setModelSuggestionsOpen(false);
       setErrors({});
       setFormData({
         vehicle: {
-          type: prefill?.type || '',
+          type: normalizeVehicleTypeKey(prefill?.type || ''),
           make: prefill?.make || '',
           model: prefill?.model || '',
           year: prefill?.year || '',
@@ -802,6 +878,26 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
   const summaryServicesCount = serviceCount === 0
     ? bt.summaryNotProvided
     : `${serviceCount} ${serviceCount > 1 ? bt.servicesPlural : bt.servicesSingular}`;
+
+  const normalizedVehicleTypeKey = normalizeVehicleTypeKey(formData.vehicle.type);
+  const popularChipGroups = POPULAR_CHIPS_BY_VEHICLE_TYPE[normalizedVehicleTypeKey] || [];
+  const popularChipItems = popularChipGroups
+    .flatMap((entry) => entry.models.map((model) => ({ make: entry.make, model })))
+    .slice(0, 6);
+  const makeInputValue = formData.vehicle.make.trim();
+  const normalizedMake = MAKE_OPTIONS_CA.find(
+    (make) => make.toLowerCase() === makeInputValue.toLowerCase()
+  ) || '';
+  const makeSuggestions = MAKE_OPTIONS_CA
+    .filter((make) =>
+      make.toLowerCase().includes(makeInputValue.toLowerCase())
+    )
+    .slice(0, 6);
+  const modelOptions = normalizedMake ? (MODELS_BY_MAKE_CA[normalizedMake] || []) : [];
+  const modelInputValue = formData.vehicle.model.trim();
+  const modelSuggestions = modelOptions
+    .filter((model) => model.toLowerCase().includes(modelInputValue.toLowerCase()))
+    .slice(0, 6);
 
   useEffect(() => {
     if (requiresDetails || hasAnyDetails) {
@@ -1131,18 +1227,60 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
                           )}
                         </div>
 
+                        {popularChipItems.length > 0 && (
+                          <div className="space-y-3">
+                            <div className="text-xs uppercase tracking-widest text-neutral-500">
+                              {bt.popularChipsTitle}
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {popularChipItems.map((chip, index) => (
+                                <button
+                                  key={`${chip.make}-${chip.model}`}
+                                  type="button"
+                                  onClick={() => handlePopularChipSelect(chip.make, chip.model)}
+                                  className={`px-3 py-1.5 rounded-full border border-neutral-700 bg-neutral-900/60 text-xs font-semibold text-neutral-200 hover:border-amber-400/60 hover:text-amber-200 transition-colors ${index >= 3 ? 'hidden sm:inline-flex' : 'inline-flex'}`}
+                                >
+                                  {chip.make} {chip.model}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <label className="text-xs uppercase tracking-widest text-neutral-400">
                               {bt.makeLabel}{requiresDetails && <span className="text-amber-400"> *</span>}
                             </label>
-                            <input
-                              ref={makeInputRef}
-                              value={formData.vehicle.make}
-                              onChange={(e) => updateVehicleField('make', e.target.value)}
-                              className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
-                              aria-invalid={Boolean(errors.make)}
-                            />
+                            <div className="relative">
+                              <input
+                                ref={makeInputRef}
+                                value={formData.vehicle.make}
+                                onChange={(e) => updateVehicleField('make', e.target.value)}
+                                onFocus={() => setMakeSuggestionsOpen(true)}
+                                onBlur={() => setTimeout(() => setMakeSuggestionsOpen(false), 120)}
+                                className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
+                                aria-invalid={Boolean(errors.make)}
+                              />
+                              {makeSuggestionsOpen && makeSuggestions.length > 0 && (
+                                <div className="absolute z-20 mt-2 w-full max-h-48 overflow-auto rounded-xl border border-neutral-700/80 bg-neutral-900/95 shadow-2xl backdrop-blur-sm ring-1 ring-black/40 divide-y divide-neutral-800/70">
+                                  {makeSuggestions.map((make) => (
+                                    <button
+                                      key={make}
+                                      type="button"
+                                      onMouseDown={(event) => {
+                                        event.preventDefault();
+                                        applyMakeSelection(make);
+                                        setMakeSuggestionsOpen(false);
+                                      }}
+                                      className="w-full text-left px-3 py-2 text-sm text-neutral-200 hover:bg-neutral-800/80 transition-colors"
+                                    >
+                                      {make}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                             <p className="text-xs text-neutral-500 mt-1">{bt.makeHelp}</p>
                             {errors.make && <p className="text-xs text-red-400 mt-1">{errors.make}</p>}
                           </div>
@@ -1151,12 +1289,34 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
                             <label className="text-xs uppercase tracking-widest text-neutral-400">
                               {bt.modelLabel}{requiresDetails && <span className="text-amber-400"> *</span>}
                             </label>
-                            <input
-                              value={formData.vehicle.model}
-                              onChange={(e) => updateVehicleField('model', e.target.value)}
-                              className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
-                              aria-invalid={Boolean(errors.model)}
-                            />
+                            <div className="relative">
+                              <input
+                                value={formData.vehicle.model}
+                                onChange={(e) => updateVehicleField('model', e.target.value)}
+                                onFocus={() => setModelSuggestionsOpen(true)}
+                                onBlur={() => setTimeout(() => setModelSuggestionsOpen(false), 120)}
+                                className="w-full bg-neutral-800 border-none p-4 rounded-lg text-white focus:ring-2 focus:ring-amber-400 outline-none"
+                                aria-invalid={Boolean(errors.model)}
+                              />
+                              {modelSuggestionsOpen && modelSuggestions.length > 0 && (
+                                <div className="absolute z-20 mt-2 w-full max-h-48 overflow-auto rounded-xl border border-neutral-700/80 bg-neutral-900/95 shadow-2xl backdrop-blur-sm ring-1 ring-black/40 divide-y divide-neutral-800/70">
+                                  {modelSuggestions.map((model) => (
+                                    <button
+                                      key={model}
+                                      type="button"
+                                      onMouseDown={(event) => {
+                                        event.preventDefault();
+                                        applyModelSelection(model);
+                                        setModelSuggestionsOpen(false);
+                                      }}
+                                      className="w-full text-left px-3 py-2 text-sm text-neutral-200 hover:bg-neutral-800/80 transition-colors"
+                                    >
+                                      {model}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                             <p className="text-xs text-neutral-500 mt-1">{bt.modelHelp}</p>
                             {errors.model && <p className="text-xs text-red-400 mt-1">{errors.model}</p>}
                           </div>
