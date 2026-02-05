@@ -1384,9 +1384,9 @@ const HomePage = ({ lang, openBooking, setPage }) => {
   const handlePopularService = (item) => {
     if (item.action === 'wrap') {
       setPage('wrap');
-      setTimeout(() => {
-        document.getElementById('wrap-prices')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
       return;
     }
 
