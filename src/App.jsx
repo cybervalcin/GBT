@@ -580,8 +580,13 @@ const BookingModal = ({ isOpen, onClose, lang, prefill, prefillServiceId, entry 
   const [errors, setErrors] = useState({});
 
   const toggleService = (serviceId) => {
-    // For now, single select logic for simplicity in this flow, but adaptable
-    setFormData((prev) => ({ ...prev, service: [serviceId] }));
+    setFormData((prev) => {
+      const exists = prev.service.includes(serviceId);
+      const nextServices = exists
+        ? prev.service.filter((id) => id !== serviceId)
+        : [...prev.service, serviceId];
+      return { ...prev, service: nextServices };
+    });
     setErrors((prev) => ({ ...prev, service: undefined }));
   };
 
